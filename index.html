@@ -450,7 +450,9 @@
       <p class="muted">Tell me what you’re trying to fix or improve. I’ll recommend a next step.</p>
       <div class="two-col" style="align-items:flex-start;margin-top:1.8rem;">
         <div class="contact-card" style="background:rgba(15,23,42,0.5);">
-          <form onsubmit="handleSubmit(event)">
+          <form action="https://formsubmit.co/hello@profetix.com" method="POST" onsubmit="handleSubmit(event)">
+            <input type="hidden" name="_subject" value="New Profetix Consultation Request">
+            <input type="hidden" name="_next" value="https://profetix.com/thanks.html">
             <div>
               <label for="name">Your name</label>
               <input type="text" id="name" name="name" placeholder="e.g. Sarah from NovaTech" required />
@@ -461,7 +463,7 @@
             </div>
             <div>
               <label for="message">What do you need help with?</label>
-              <textarea id="message" name="message" placeholder="Describe the computer/IT issue, or what you're planning..."></textarea>
+              <textarea id="message" name="message" placeholder="Describe the computer/IT issue, or what you're planning..." required></textarea>
             </div>
             <button type="submit" class="btn-primary" style="width:max-content;">Send to Profetix →</button>
             <p id="formMessage" style="font-size:0.75rem;color:var(--muted);margin-top:0.6rem;"></p>
@@ -486,12 +488,19 @@
       m.classList.toggle("show");
     }
 
-    // fake form handler
+    // form submission handler with status messages
     function handleSubmit(e) {
-      e.preventDefault();
       const msg = document.getElementById("formMessage");
-      msg.textContent = "Thanks! Your message has been recorded. Hadi will follow up.";
-      e.target.reset();
+      const form = e.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      
+      // Show sending status
+      submitBtn.disabled = true;
+      msg.textContent = "Sending message...";
+      
+      // Let form submit proceed - FormSubmit.co will handle it
+      // Form will redirect to _next URL after successful submission
+      return true;
     }
 
     // dynamic year
