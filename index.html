@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profetix | Technology Consulting by Hadi</title>
+  <meta name="description" content="Profetix is a technology consulting business led by Hadi, helping organizations plan, build, and optimize computer and IT solutions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-light: #111827;
+      --card: rgba(15,23,42,0.55);
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.15);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --radius-lg: 1.5rem;
+      --radius-md: 1rem;
+      --shadow-lg: 0 24px 60px rgba(0,0,0,0.35);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617 0%, #020617 35%, #020617 70%, #000 100%), #0f172a;
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      /* Use a solid background for a single unified navbar */
+      background: var(--bg);
+      /* remove blur so the navbar is visually solid */
+      /* backdrop-filter: blur(14px); */
+      border-bottom: 1px solid rgba(148,163,184,0.08);
+    }
+    .nav {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      gap: 1rem;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+    .logo-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 0.9rem;
+      background: radial-gradient(circle, #38bdf8 0%, #0ea5e9 60%, #075985 100%);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.15s ease;
+      font-size: 0.9rem;
+    }
+    nav a:hover,
+    nav a.active {
+      color: #fff;
+    }
+    .nav-btn {
+      background: rgba(148,163,184,0.08);
+      color: white;
+      border: 1px solid rgba(148,163,184,0.2);
+      border-radius: 999px;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: 0.15s ease-in-out;
+    }
+    .nav-btn:hover {
+      background: rgba(148,163,184,0.25);
+    }
+    .hero {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 4.5rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2.7rem;
+      align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex;
+      gap: 0.4rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56,189,248,0.1);
+      color: #e2e8f0;
+      border: 1px solid rgba(56,189,248,0.2);
+      font-size: 0.75rem;
+      margin-bottom: 1.2rem;
+      align-items: center;
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 5vw, 3.3rem);
+      line-height: 1.03;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.04em;
+    }
+    .hero p {
+      color: var(--muted);
+      max-width: 34rem;
+      margin-bottom: 1.6rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: radial-gradient(circle, #38bdf8 0%, #0ea5e9 65%);
+      border: none;
+      border-radius: 999px;
+      color: #020617;
+      font-weight: 600;
+      padding: 0.7rem 1.3rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 12px 40px rgba(14,165,233,0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    .btn-secondary {
+      background: rgba(15,23,42,0.35);
+      border: 1px solid rgba(148,163,184,0.2);
+      border-radius: 999px;
+      color: #e2e8f0;
+      font-weight: 500;
+      padding: 0.7rem 1.1rem;
+      font-size: 0.84rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .hero-card {
+      background: radial-gradient(circle at top, rgba(15,23,42,0.8) 0%, rgba(15,23,42,0.1) 70%), rgba(15,23,42,0.4);
+      border: 1px solid rgba(148,163,184,0.1);
+      border-radius: 1.3rem;
+      padding: 1.6rem 1.5rem 1.3rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+    .hero-card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.1rem;
+    }
+    .hero-card-title h2 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 1rem;
+    }
+    .metric {
+      background: rgba(15,23,42,0.45);
+      border: 1px solid rgba(148,163,184,0.05);
+      border-radius: 1rem;
+      padding: 0.75rem 0.8rem 0.7rem;
+    }
+    .metric-label {
+      color: var(--muted);
+      font-size: 0.7rem;
+      margin-bottom: 0.2rem;
+    }
+    .metric-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    section {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 3.7rem 1.5rem 3.5rem;
+    }
+    .section-title {
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.6rem;
+      margin-top: 2rem;
+    }
+    .service-card {
+      background: rgba(15,23,42,0.35);
+      border: 1px solid rgba(148,163,184,0.1);
+      border-radius: 1.3rem;
+      padding: 1.3rem 1.2rem 1.1rem;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+    }
+    .service-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 1rem;
+      background: rgba(56,189,248,0.15);
+      display: grid;
+      place-items: center;
+      margin-bottom: 0.7rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .service-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+    }
+    .service-card p {
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .list-check {
+      list-style: none;
+      padding-left: 0;
+      display: grid;
+      gap: 0.5rem;
+    }
+    .list-check li::before {
+      content: "✓";
+      color: #38bdf8;
+      margin-right: 0.5rem;
+      font-weight: 700;
+    }
+    .contact-card {
+      background: rgba(15,23,42,0.35);
+      border: 1px solid rgba(148,163,184,0.05);
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.2rem 1rem;
+    }
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+    label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    input, textarea {
+      background: rgba(2,6,23,0.35);
+      border: 1px solid rgba(148,163,184,0.08);
+      border-radius: 0.7rem;
+      padding: 0.5rem 0.6rem 0.5rem;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.83rem;
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    footer {
+      padding: 2.5rem 1.5rem 2.7rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 0.7rem;
+      flex-wrap: wrap;
+    }
+    .mobile-nav-toggle {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+      nav {
+        display: none;
+      }
+      .mobile-nav-toggle {
+        display: inline-flex;
+        background: none;
+        border: 1px solid rgba(148,163,184,0.2);
+        border-radius: 0.55rem;
+        color: white;
+        padding: 0.35rem 0.55rem;
+      }
+      .mobile-menu {
+        display: none;
+        /* keep mobile menu visually the same as header */
+        background: var(--bg);
+        /* backdrop-filter: blur(14px); */
+        border-bottom: 1px solid rgba(148,163,184,0.12);
+      }
+      .mobile-menu.show {
+        display: block;
+      }
+      .mobile-menu a {
+        display: block;
+        padding: 0.65rem 1.5rem;
+        border-bottom: 1px solid rgba(148,163,184,0.04);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="logo">
+        <div class="logo-badge">P</div>
+        Profetix
+      </div>
+      <nav>
+        <a href="#home" class="active">Home</a>
+        <a href="#services">Services</a>
+        <a href="#about">Why Profetix</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="nav-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+        Book a consult
+      </button>
+      <button class="mobile-nav-toggle" onclick="toggleMenu()">☰</button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu">
+      <!-- <a href="#home" onclick="toggleMenu()">Home</a>
+      <a href="#services" onclick="toggleMenu()">Services</a>
+      <a href="#about" onclick="toggleMenu()">Why Profetix</a>
+      <a href="#contact" onclick="toggleMenu()">Contact</a> -->
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div>
+        <div class="hero-tag">
+          <span>👋</span> <span>Hi, I'm Hadi — Tech Consultant</span>
+        </div>
+        <h1>Modern computer consulting for teams that want to work smarter.</h1>
+        <p>Profetix helps businesses choose, secure, and optimize their technology — from infrastructure and cloud to workflow automations and support. Practical, clear, and tailored to your stack.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">Request a call →</a>
+          <a href="#services" class="btn-secondary">View services</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">
+          <h2>Why work with Profetix?</h2>
+          <span style="color:var(--muted);font-size:0.7rem">Led by Hadi</span>
+        </div>
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-label">Core focus</div>
+            <div class="metric-value" style="font-size:1rem;">Computers & IT</div>
+            <p style="color:var(--muted);font-size:0.7rem;">Strategy, setup, troubleshooting</p>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Engagements</div>
+            <div class="metric-value">Flexible</div>
+            <p style="color:var(--muted);font-size:0.7rem;">Hourly or project-based</p>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Response</div>
+            <div class="metric-value">Fast</div>
+            <p style="color:var(--muted);font-size:0.7rem;">Direct access to Hadi</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <h2 class="section-title">Consulting services</h2>
+      <p class="muted">Designed so you can start small and grow as your systems grow.</p>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">1</div>
+          <h3>IT & Computer Setup</h3>
+          <p>Device setup, OS configuration, security baselines, and best practices for small teams.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">2</div>
+          <h3>Systems & Infrastructure</h3>
+          <p>Networks, servers, cloud services, access control, and performance recommendations.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">3</div>
+          <h3>Troubleshooting & Support</h3>
+          <p>Remote diagnostics, problem isolation, and documentation to prevent repeat issues.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">4</div>
+          <h3>Process Automation</h3>
+          <p>Automating repetitive computer tasks to save your team hours each week.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="two-col">
+      <div>
+        <h2 class="section-title">Why Profetix?</h2>
+        <p class="muted">You're not just hiring a firm — you're working directly with **Hadi**, someone who actually understands computers and will explain things without jargon.</p>
+        <ul class="list-check">
+          <li>Clear, non-technical explanations (when you want them)</li>
+          <li>Flexible: remote or on-site style engagement</li>
+          <li>Security-minded from the start</li>
+          <li>We document everything we set up</li>
+        </ul>
+      </div>
+      <div class="contact-card">
+        <h3>About Hadi</h3>
+        <p class="muted">Founder & Lead Consultant at Profetix</p>
+        <p class="muted">“I help businesses get more out of the computers they already own — and choose the right tools when they need to grow.”</p>
+        <p style="margin-top:1rem;font-size:0.78rem;color:var(--muted);">Available for: computer consulting, IT planning, problem solving, and ongoing advisory.</p>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 class="section-title">Let's talk about your setup</h2>
+      <p class="muted">Tell me what you’re trying to fix or improve. I’ll recommend a next step.</p>
+      <div class="two-col" style="align-items:flex-start;margin-top:1.8rem;">
+        <div class="contact-card" style="background:rgba(15,23,42,0.5);">
+          <form onsubmit="handleSubmit(event)">
+            <div>
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" placeholder="e.g. Sarah from NovaTech" required />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required />
+            </div>
+            <div>
+              <label for="message">What do you need help with?</label>
+              <textarea id="message" name="message" placeholder="Describe the computer/IT issue, or what you're planning..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:max-content;">Send to Profetix →</button>
+            <p id="formMessage" style="font-size:0.75rem;color:var(--muted);margin-top:0.6rem;"></p>
+          </form>
+        </div>
+        <div>
+          <h3 style="margin-bottom:0.6rem;">Contact details</h3>
+          <p class="muted" style="margin-bottom:0.7rem;">Email: <a href="mailto:hello@profetix.com" style="color:#fff;">hello@profetix.com</a> </p>
+          <p class="muted">Preferred areas: computer setup, IT strategy, troubleshooting, network performance.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> Profetix — Consulting by Hadi. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const m = document.getElementById("mobileMenu");
+      m.classList.toggle("show");
+    }
+
+    // fake form handler
+    function handleSubmit(e) {
+      e.preventDefault();
+      const msg = document.getElementById("formMessage");
+      msg.textContent = "Thanks! Your message has been recorded. Hadi will follow up.";
+      e.target.reset();
+    }
+
+    // dynamic year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // highlight nav link on scroll
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll("nav a");
+    window.addEventListener("scroll", () => {
+      let current = "";
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 120;
+        if (pageYOffset >= sectionTop) {
+          current = section.getAttribute("id");
+        }
+      });
+      navLinks.forEach((a) => {
+        a.classList.remove("active");
+        if (a.getAttribute("href") === "#" + current) {
+          a.classList.add("active");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
