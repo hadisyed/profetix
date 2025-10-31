@@ -3,334 +3,285 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profetix | Technology Consulting by Hadi</title>
-  <meta name="description" content="Profetix is a technology consulting business led by Hadi, helping organizations plan, build, and optimize computer and IT solutions." />
+  <title>PROFETIX — Intelligence for Human Progress</title>
+  <meta name="description" content="PROFETIX is an AI innovation studio creating intelligent digital products that amplify human potential." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- You can swap to Inter / Manrope / Satoshi if you have self-hosted -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --bg-light: #111827;
-      --card: rgba(15,23,42,0.55);
-      --accent: #38bdf8;
-      --accent-soft: rgba(56,189,248,0.15);
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --radius-lg: 1.5rem;
-      --radius-md: 1rem;
-      --shadow-lg: 0 24px 60px rgba(0,0,0,0.35);
+      --bg: #0a0c10;
+      --card: rgba(13, 15, 20, 0.6);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.55);
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #00e0ff;
+      --radius-lg: 1.6rem;
+      --shadow-lg: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --max-width: 1180px;
     }
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     body {
-      margin: 0;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #020617 0%, #020617 35%, #020617 70%, #000 100%), #0f172a;
+      font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #131722 0%, #06070b 45%, #030304 75%);
       color: var(--text);
       line-height: 1.6;
-      scroll-behavior: smooth;
+      min-height: 100vh;
     }
     header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      /* Use a solid background for a single unified navbar */
-      background: var(--bg);
-      /* remove blur so the navbar is visually solid */
-      /* backdrop-filter: blur(14px); */
-      border-bottom: 1px solid rgba(148,163,184,0.08);
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      background: radial-gradient(circle at top, rgba(10, 12, 16, 0.7), rgba(10, 12, 16, 0.2));
     }
     .nav {
-      max-width: 1080px;
+      max-width: var(--max-width);
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1.5rem;
-      gap: 1rem;
+      padding: 1rem 1.5rem;
     }
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.02em;
+      gap: 0.5rem;
     }
-    .logo-badge {
-      width: 36px;
-      height: 36px;
-      border-radius: 0.9rem;
-      background: radial-gradient(circle, #38bdf8 0%, #0ea5e9 60%, #075985 100%);
+    .logo-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(0, 224, 255, 1) 0%, rgba(0, 224, 255, 0) 65%);
+      border: 1px solid rgba(0, 224, 255, 0.25);
       display: grid;
       place-items: center;
       font-weight: 700;
-      color: #0f172a;
+      font-size: 0.7rem;
+      letter-spacing: .1em;
     }
-    nav a {
+    .logo-text {
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+    }
+    .nav-links a {
       color: var(--muted);
       text-decoration: none;
-      font-weight: 500;
-      transition: 0.15s ease;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      transition: .25s ease;
     }
-    nav a:hover,
-    nav a.active {
+    .nav-links a:hover,
+    .nav-links a.active {
       color: #fff;
     }
-    .nav-btn {
-      background: rgba(148,163,184,0.08);
-      color: white;
-      border: 1px solid rgba(148,163,184,0.2);
+    .btn-primary {
+      background: linear-gradient(120deg, #15ebff 0%, #00b5ff 100%);
+      border: none;
+      padding: .55rem 1.1rem;
       border-radius: 999px;
-      padding: 0.5rem 1.1rem;
-      font-size: 0.78rem;
+      color: #05070a;
+      font-weight: 600;
       cursor: pointer;
-      transition: 0.15s ease-in-out;
+      transition: .25s ease;
+      font-size: 0.8rem;
     }
-    .nav-btn:hover {
-      background: rgba(148,163,184,0.25);
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
     }
     .hero {
-      max-width: 1080px;
+      max-width: var(--max-width);
       margin: 0 auto;
-      padding: 4.5rem 1.5rem 4rem;
+      padding: 5rem 1.5rem 4rem;
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 2.7rem;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 3rem;
       align-items: center;
     }
-    .hero-tag {
-      display: inline-flex;
-      gap: 0.4rem;
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
-      background: rgba(56,189,248,0.1);
-      color: #e2e8f0;
-      border: 1px solid rgba(56,189,248,0.2);
-      font-size: 0.75rem;
-      margin-bottom: 1.2rem;
-      align-items: center;
+    .hero-heading {
+      font-size: clamp(2.4rem, 4vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
     }
-    .hero h1 {
-      font-size: clamp(2.6rem, 5vw, 3.3rem);
-      line-height: 1.03;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.04em;
-    }
-    .hero p {
+    .hero-sub {
       color: var(--muted);
-      max-width: 34rem;
-      margin-bottom: 1.6rem;
+      max-width: 33rem;
+      margin-bottom: 2.1rem;
     }
-    .hero-actions {
+    .hero-badges {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .hero-badge {
+      background: radial-gradient(circle, rgba(0, 224, 255, 0.35) 0%, rgba(0, 224, 255, 0) 80%);
+      border: 1px solid rgba(0, 224, 255, 0.24);
+      padding: .35rem 1rem .35rem .35rem;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .hero-badge-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(8, 248, 201, 0.9);
+      box-shadow: 0 0 24px rgba(8, 248, 201, .45);
+    }
+    .hero-cta {
       display: flex;
       gap: 1rem;
       flex-wrap: wrap;
     }
-    .btn-primary {
-      background: radial-gradient(circle, #38bdf8 0%, #0ea5e9 65%);
-      border: none;
+    .ghost-btn {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: .55rem 1.1rem;
       border-radius: 999px;
-      color: #020617;
-      font-weight: 600;
-      padding: 0.7rem 1.3rem;
-      font-size: 0.9rem;
-      cursor: pointer;
-      box-shadow: 0 12px 40px rgba(14,165,233,0.4);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-    }
-    .btn-secondary {
-      background: rgba(15,23,42,0.35);
-      border: 1px solid rgba(148,163,184,0.2);
-      border-radius: 999px;
-      color: #e2e8f0;
+      color: #fff;
       font-weight: 500;
-      padding: 0.7rem 1.1rem;
-      font-size: 0.84rem;
       cursor: pointer;
-      text-decoration: none;
+      display: inline-flex;
+      gap: .5rem;
+      align-items: center;
+      font-size: 0.8rem;
     }
-    .hero-card {
-      background: radial-gradient(circle at top, rgba(15,23,42,0.8) 0%, rgba(15,23,42,0.1) 70%), rgba(15,23,42,0.4);
-      border: 1px solid rgba(148,163,184,0.1);
-      border-radius: 1.3rem;
-      padding: 1.6rem 1.5rem 1.3rem;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    .hero-panel {
+      background: radial-gradient(circle at 6% 20%, rgba(0, 224, 255, .16), rgba(7,9,14,1));
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.2rem 1.4rem;
+      box-shadow: var(--shadow-lg);
     }
-    .hero-card-title {
+    .panel-title {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255, 255, 255, .5);
+      margin-bottom: 1.2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.1rem;
     }
-    .hero-card-title h2 {
-      margin: 0;
-      font-size: 1.05rem;
+    .panel-title small {
+      font-size: .6rem;
     }
-    .metric-grid {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 1rem;
     }
-    .metric {
-      background: rgba(15,23,42,0.45);
-      border: 1px solid rgba(148,163,184,0.05);
+    .signal-box {
+      background: rgba(13, 17, 26, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.02);
       border-radius: 1rem;
-      padding: 0.75rem 0.8rem 0.7rem;
+      padding: .8rem .9rem 1rem;
     }
-    .metric-label {
-      color: var(--muted);
-      font-size: 0.7rem;
-      margin-bottom: 0.2rem;
+    .signal-label {
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255, 255, 255, .5);
+      margin-bottom: .4rem;
     }
-    .metric-value {
-      font-size: 1.4rem;
+    .signal-value {
+      font-size: 1.65rem;
       font-weight: 700;
+      margin-bottom: .4rem;
+    }
+    .signal-sub {
+      font-size: .6rem;
+      color: rgba(255,255,255, .35);
+    }
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255, 0.05);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: .6rem;
+    }
+    .progress {
+      height: 100%;
+      background: linear-gradient(120deg, #0ff 0%, #5a79ff 100%);
+      width: 65%;
+      border-radius: 999px;
+      transition: width 1s ease;
     }
     section {
-      max-width: 1080px;
+      max-width: var(--max-width);
       margin: 0 auto;
-      padding: 3.7rem 1.5rem 3.5rem;
+      padding: 3.5rem 1.5rem 3.5rem;
     }
     .section-title {
-      font-size: 1.7rem;
-      margin-bottom: 1rem;
+      font-size: 2rem;
+      margin-bottom: .75rem;
     }
-    .muted {
+    .section-sub {
+      max-width: 44rem;
       color: var(--muted);
+      margin-bottom: 2.5rem;
     }
-    .services-grid {
+    .three-cols {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.6rem;
-      margin-top: 2rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.3rem;
     }
-    .service-card {
-      background: rgba(15,23,42,0.35);
-      border: 1px solid rgba(148,163,184,0.1);
-      border-radius: 1.3rem;
-      padding: 1.3rem 1.2rem 1.1rem;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+    .card {
+      background: rgba(10, 12, 16, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      border-radius: 1.35rem;
+      padding: 1.2rem 1.1rem 1.35rem;
+      backdrop-filter: blur(6px);
     }
-    .service-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 1rem;
-      background: rgba(56,189,248,0.15);
-      display: grid;
-      place-items: center;
-      margin-bottom: 0.7rem;
-      font-weight: 700;
-      color: #e2e8f0;
+    .card small {
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: .6rem;
+      color: rgba(255, 255, 255, 0.45);
     }
-    .service-card h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1rem;
+    .card h3 {
+      margin-top: .5rem;
+      margin-bottom: .5rem;
     }
-    .service-card p {
-      color: var(--muted);
-      font-size: 0.83rem;
-    }
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1.1fr;
-      gap: 2.5rem;
-      align-items: center;
-    }
-    .list-check {
-      list-style: none;
-      padding-left: 0;
-      display: grid;
-      gap: 0.5rem;
-    }
-    .list-check li::before {
-      content: "✓";
-      color: #38bdf8;
-      margin-right: 0.5rem;
-      font-weight: 700;
-    }
-    .contact-card {
-      background: rgba(15,23,42,0.35);
-      border: 1px solid rgba(148,163,184,0.05);
-      border-radius: 1.2rem;
-      padding: 1.3rem 1.2rem 1rem;
-    }
-    form {
-      display: grid;
-      gap: 1rem;
-    }
-    label {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-    input, textarea {
-      background: rgba(2,6,23,0.35);
-      border: 1px solid rgba(148,163,184,0.08);
-      border-radius: 0.7rem;
-      padding: 0.5rem 0.6rem 0.5rem;
-      color: #fff;
-      font-family: inherit;
-      font-size: 0.83rem;
-    }
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-    footer {
-      padding: 2.5rem 1.5rem 2.7rem;
+    .footer {
+      border-top: 1px solid rgba(255, 255, 255, .02);
+      padding: 2.2rem 1.5rem 3.2rem;
+      color: rgba(255, 255, 255, 0.4);
       text-align: center;
-      color: var(--muted);
-      font-size: 0.75rem;
+      font-size: .7rem;
     }
-    .footer-links {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-bottom: 0.7rem;
-      flex-wrap: wrap;
-    }
-    .mobile-nav-toggle {
-      display: none;
-    }
-
-    @media (max-width: 900px) {
+    @media (max-width: 980px) {
       .hero {
         grid-template-columns: 1fr;
       }
-      .two-col {
+      .nav-links {
+        display: none;
+      }
+      .three-cols {
         grid-template-columns: 1fr;
       }
-      nav {
-        display: none;
-      }
-      .mobile-nav-toggle {
-        display: inline-flex;
-        background: none;
-        border: 1px solid rgba(148,163,184,0.2);
-        border-radius: 0.55rem;
-        color: white;
-        padding: 0.35rem 0.55rem;
-      }
-      .mobile-menu {
-        display: none;
-        /* keep mobile menu visually the same as header */
-        background: var(--bg);
-        /* backdrop-filter: blur(14px); */
-        border-bottom: 1px solid rgba(148,163,184,0.12);
-      }
-      .mobile-menu.show {
-        display: block;
-      }
-      .mobile-menu a {
-        display: block;
-        padding: 0.65rem 1.5rem;
-        border-bottom: 1px solid rgba(148,163,184,0.04);
+      .hero-heading {
+        font-size: 2.5rem;
       }
     }
   </style>
@@ -339,190 +290,207 @@
   <header>
     <div class="nav">
       <div class="logo">
-        <div class="logo-badge">P</div>
-        Profetix
+        <div class="logo-circle">PX</div>
+        <div class="logo-text">PROFETIX</div>
       </div>
-      <nav>
-        <a href="#home" class="active">Home</a>
-        <a href="#services">Services</a>
-        <a href="#about">Why Profetix</a>
+      <nav class="nav-links">
+        <a href="#about" class="active">About</a>
+        <a href="#capabilities">Capabilities</a>
+        <a href="#approach">Approach</a>
         <a href="#contact">Contact</a>
+        <button class="btn-primary" onclick="scrollToContact()">Work with us</button>
       </nav>
-      <button class="nav-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-        Book a consult
-      </button>
-      <button class="mobile-nav-toggle" onclick="toggleMenu()">☰</button>
-    </div>
-    <div id="mobileMenu" class="mobile-menu">
-      <!-- <a href="#home" onclick="toggleMenu()">Home</a>
-      <a href="#services" onclick="toggleMenu()">Services</a>
-      <a href="#about" onclick="toggleMenu()">Why Profetix</a>
-      <a href="#contact" onclick="toggleMenu()">Contact</a> -->
     </div>
   </header>
 
   <main>
-    <section id="home" class="hero">
+    <section class="hero" id="home">
       <div>
-        <div class="hero-tag">
-          <span>👋</span> <span>Hi, I'm Hadi — Tech Consultant</span>
+        <div class="hero-badges">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            AI-First Studio
+          </div>
+          <div class="hero-badge">
+            <span class="hero-badge-dot" style="background: rgba(255, 164, 27, .9); box-shadow: 0 0 24px rgba(255, 164, 27, .6)"></span>
+            Product Innovation
+          </div>
         </div>
-        <h1>Modern computer consulting for teams that want to work smarter.</h1>
-        <p>Profetix helps businesses choose, secure, and optimize their technology — from infrastructure and cloud to workflow automations and support. Practical, clear, and tailored to your stack.</p>
-        <div class="hero-actions">
-          <a href="#contact" class="btn-primary">Request a call →</a>
-          <a href="#services" class="btn-secondary">View services</a>
+        <h1 class="hero-heading">Intelligence for human progress.</h1>
+        <p class="hero-sub">
+          PROFETIX designs and builds AI-powered digital products that help people learn, communicate, and grow — with clarity, empathy, and precision.
+        </p>
+        <div class="hero-cta">
+          <button class="btn-primary" onclick="scrollToContact()">Start a project</button>
+          <button class="ghost-btn" onclick="scrollToAbout()">Explore the studio →</button>
         </div>
       </div>
-      <div class="hero-card">
-        <div class="hero-card-title">
-          <h2>Why work with Profetix?</h2>
-          <span style="color:var(--muted);font-size:0.7rem">Led by Hadi</span>
+      <div class="hero-panel" aria-label="PROFETIX activity panel">
+        <div class="panel-title">
+          <span>Studio Signal • Live</span>
+          <small id="studioTime"></small>
         </div>
-        <div class="metric-grid">
-          <div class="metric">
-            <div class="metric-label">Core focus</div>
-            <div class="metric-value" style="font-size:1rem;">Computers & IT</div>
-            <p style="color:var(--muted);font-size:0.7rem;">Strategy, setup, troubleshooting</p>
+        <div class="grid">
+          <div class="signal-box">
+            <div class="signal-label">Active initiatives</div>
+            <div class="signal-value" id="activeProjects">7</div>
+            <div class="signal-sub">New product explorations in language, learning, and personalization.</div>
+            <div class="progress-bar">
+              <div class="progress" id="prog1"></div>
+            </div>
           </div>
-          <div class="metric">
-            <div class="metric-label">Engagements</div>
-            <div class="metric-value">Flexible</div>
-            <p style="color:var(--muted);font-size:0.7rem;">Hourly or project-based</p>
+          <div class="signal-box">
+            <div class="signal-label">AI components reused</div>
+            <div class="signal-value" id="componentsCount">36</div>
+            <div class="signal-sub">Shared intelligence across experiences.</div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 82%;" id="prog2"></div>
+            </div>
           </div>
-          <div class="metric">
-            <div class="metric-label">Response</div>
-            <div class="metric-value">Fast</div>
-            <p style="color:var(--muted);font-size:0.7rem;">Direct access to Hadi</p>
+          <div class="signal-box">
+            <div class="signal-label">Human-centric score</div>
+            <div class="signal-value" id="scoreValue">9.4</div>
+            <div class="signal-sub">Evaluated on clarity, accessibility, and delight.</div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 94%;" id="prog3"></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="services">
-      <h2 class="section-title">Consulting services</h2>
-      <p class="muted">Designed so you can start small and grow as your systems grow.</p>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">1</div>
-          <h3>IT & Computer Setup</h3>
-          <p>Device setup, OS configuration, security baselines, and best practices for small teams.</p>
+    <section id="about">
+      <h2 class="section-title">About the studio</h2>
+      <p class="section-sub">
+        PROFETIX is an independent AI innovation studio. We partner with founders, educators, and future-focused teams to build intelligent products — from concept to launch. Our work blends robust AI systems with human-centered design.
+      </p>
+      <div class="three-cols">
+        <div class="card">
+          <small>Philosophy</small>
+          <h3>Human-first intelligence</h3>
+          <p>We believe AI should amplify, not replace, human capability. Every product begins with people, not with models.</p>
         </div>
-        <div class="service-card">
-          <div class="service-icon">2</div>
-          <h3>Systems & Infrastructure</h3>
-          <p>Networks, servers, cloud services, access control, and performance recommendations.</p>
+        <div class="card">
+          <small>Focus</small>
+          <h3>Learning & communication</h3>
+          <p>We specialize in experiences that make people smarter — language, knowledge, creativity, and expression.</p>
         </div>
-        <div class="service-card">
-          <div class="service-icon">3</div>
-          <h3>Troubleshooting & Support</h3>
-          <p>Remote diagnostics, problem isolation, and documentation to prevent repeat issues.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">4</div>
-          <h3>Process Automation</h3>
-          <p>Automating repetitive computer tasks to save your team hours each week.</p>
+        <div class="card">
+          <small>Delivery</small>
+          <h3>Idea → Interface → Launch</h3>
+          <p>Research, product strategy, UX, conversational design, and lightweight engineering in one studio.</p>
         </div>
       </div>
     </section>
 
-    <section id="about" class="two-col">
-      <div>
-        <h2 class="section-title">Why Profetix?</h2>
-        <p class="muted">You're not just hiring a firm — you're working directly with Hadi, someone who actually understands computers and will explain things without jargon.</p>
-        <ul class="list-check">
-          <li>Clear, non-technical explanations (when you want them)</li>
-          <li>Flexible: remote or on-site style engagement</li>
-          <li>Security-minded from the start</li>
-          <li>We document everything we set up</li>
-        </ul>
+    <section id="capabilities">
+      <h2 class="section-title">What we build</h2>
+      <p class="section-sub">
+        AI-native products that are fast to ship, simple to use, and ready to scale.
+      </p>
+      <div class="three-cols">
+        <div class="card">
+          <small>01</small>
+          <h3>Conversational AI</h3>
+          <p>Chat experiences, voice assistants, and language tools powered by LLMs — designed to feel natural.</p>
+        </div>
+        <div class="card">
+          <small>02</small>
+          <h3>Learning systems</h3>
+          <p>Adaptive lessons, feedback loops, and assessment engines for education, onboarding, or coaching.</p>
+        </div>
+        <div class="card">
+          <small>03</small>
+          <h3>Intelligent dashboards</h3>
+          <p>Interfaces that prioritize clarity — signals, automation triggers, and human-in-the-loop control.</p>
+        </div>
       </div>
-      <div class="contact-card">
-        <h3>About Hadi</h3>
-        <p class="muted">Founder & Lead Consultant at Profetix</p>
-        <p class="muted">“I help businesses get more out of the computers they already own — and choose the right tools when they need to grow.”</p>
-        <p style="margin-top:1rem;font-size:0.78rem;color:var(--muted);">Available for: computer consulting, IT planning, problem solving, and ongoing advisory.</p>
+    </section>
+
+    <section id="approach">
+      <h2 class="section-title">How we work</h2>
+      <p class="section-sub">
+        A lightweight, R&D-informed process that balances experimentation with delivery.
+      </p>
+      <div class="three-cols">
+        <div class="card">
+          <small>Phase 1</small>
+          <h3>Discovery & framing</h3>
+          <p>We identify the user, problem, and AI opportunity — and define success metrics.</p>
+        </div>
+        <div class="card">
+          <small>Phase 2</small>
+          <h3>Prototyping</h3>
+          <p>We build interactive flows, define prompts, and test with real users.</p>
+        </div>
+        <div class="card">
+          <small>Phase 3</small>
+          <h3>Launch & evolve</h3>
+          <p>We release early, monitor usage, and evolve the experience with data.</p>
+        </div>
       </div>
     </section>
 
     <section id="contact">
-      <h2 class="section-title">Let's talk about your setup</h2>
-      <p class="muted">Tell me what you’re trying to fix or improve. I’ll recommend a next step.</p>
-      <div class="two-col" style="align-items:flex-start;margin-top:1.8rem;">
-        <div class="contact-card" style="background:rgba(15,23,42,0.5);">
-          <form action="https://formsubmit.co/hello@profetix.com" method="POST" onsubmit="handleSubmit(event)">
-            <!-- <input type="hidden" name="_subject" value="New Profetix Consultation Request">
-            <input type="hidden" name="_next" value="https://profetix.com/thanks.html">
-            <div>
-              <label for="name">Your name</label>
-              <input type="text" id="name" name="name" placeholder="e.g. Sarah from NovaTech" required />
-            </div>
-            <div>
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="you@example.com" required />
-            </div>
-            <div>
-              <label for="message">What do you need help with?</label>
-              <textarea id="message" name="message" placeholder="Describe the computer/IT issue, or what you're planning..." required></textarea>
-            </div>
-            <button type="submit" class="btn-primary" style="width:max-content;">Send to Profetix →</button>
-            <p id="formMessage" style="font-size:0.75rem;color:var(--muted);margin-top:0.6rem;"></p> -->
-          <!-- </form>
-        </div> -->
-        <div>
-          <h3 style="margin-bottom:0.6rem;">Contact details</h3>
-          <p class="muted" style="margin-bottom:0.7rem;">Email: <a href="mailto:hello@profetix.com" style="color:#fff;">hello@profetix.com</a> </p>
-          <p class="muted">Preferred areas: computer setup, IT strategy, troubleshooting, network performance.</p>
-        </div>
-      </div>
+      <h2 class="section-title">Start something with PROFETIX</h2>
+      <p class="section-sub">
+        Tell us about the product you want to build — language, education, or intelligent UX — and we’ll get back to you with a plan.
+      </p>
+      <form id="contactForm" class="card" style="max-width: 540px;">
+        <label for="name">Name</label><br/>
+        <input id="name" name="name" type="text" placeholder="Your name" required
+               style="width: 100%; margin-bottom: .9rem; margin-top:.2rem; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.06); border-radius: .6rem; padding: .6rem .55rem; color: #fff;">
+        <label for="email">Email</label><br/>
+        <input id="email" name="email" type="email" placeholder="you@example.com" required
+               style="width: 100%; margin-bottom: .9rem; margin-top:.2rem; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.06); border-radius: .6rem; padding: .6rem .55rem; color: #fff;">
+        <label for="message">What would you like to build?</label><br/>
+        <textarea id="message" name="message" rows="4" placeholder="Describe your AI product or challenge..." required
+                  style="width: 100%; margin-bottom: .9rem; margin-top:.2rem; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.06); border-radius: .6rem; padding: .6rem .55rem; color: #fff; resize: vertical;"></textarea>
+        <button type="submit" class="btn-primary">Submit message</button>
+        <p id="formStatus" style="color: rgba(255,255,255,0.6); font-size: .7rem; margin-top: .6rem; display:none;">Thanks — we received your message.</p>
+      </form>
     </section>
   </main>
 
-  <footer>
-    <p>© <span id="year"></span> Profetix — Consulting by Hadi. All rights reserved.</p>
+  <footer class="footer">
+    © <span id="year"></span> PROFETIX. All rights reserved.
   </footer>
 
   <script>
-    function toggleMenu() {
-      const m = document.getElementById("mobileMenu");
-      m.classList.toggle("show");
+    // dynamic time in hero panel
+    function updateStudioTime() {
+      const el = document.getElementById('studioTime');
+      const now = new Date();
+      el.textContent = now.toUTCString();
+    }
+    updateStudioTime();
+    setInterval(updateStudioTime, 60000);
+
+    // smooth scroll helpers
+    function scrollToContact() {
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    }
+    function scrollToAbout() {
+      document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // form submission handler with status messages
-    function handleSubmit(e) {
-      const msg = document.getElementById("formMessage");
-      const form = e.target;
-      const submitBtn = form.querySelector('button[type="submit"]');
-      
-      // Show sending status
-      submitBtn.disabled = true;
-      msg.textContent = "Sending message...";
-      
-      // Let form submit proceed - FormSubmit.co will handle it
-      // Form will redirect to _next URL after successful submission
-      return true;
-    }
+    // fake contact submission
+    const form = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      formStatus.style.display = 'block';
+      form.reset();
+    });
 
-    // dynamic year
-    document.getElementById("year").textContent = new Date().getFullYear();
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // highlight nav link on scroll
-    const sections = document.querySelectorAll("section[id]");
-    const navLinks = document.querySelectorAll("nav a");
-    window.addEventListener("scroll", () => {
-      let current = "";
-      sections.forEach((section) => {
-        const sectionTop = section.offsetTop - 120;
-        if (pageYOffset >= sectionTop) {
-          current = section.getAttribute("id");
-        }
-      });
-      navLinks.forEach((a) => {
-        a.classList.remove("active");
-        if (a.getAttribute("href") === "#" + current) {
-          a.classList.add("active");
-        }
-      });
+    // animate progress bars on load
+    window.addEventListener('load', () => {
+      document.getElementById('prog1').style.width = '76%';
+      document.getElementById('prog2').style.width = '88%';
+      document.getElementById('prog3').style.width = '94%';
     });
   </script>
 </body>
