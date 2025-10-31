@@ -474,11 +474,33 @@
       document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // fake contact submission
+    // contact submission — open user's email client to send to hello@profetix.com
     const form = document.getElementById('contactForm');
     const formStatus = document.getElementById('formStatus');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      const name = (form.name && form.name.value) ? form.name.value.trim() : '';
+      const email = (form.email && form.email.value) ? form.email.value.trim() : '';
+      const message = (form.message && form.message.value) ? form.message.value.trim() : '';
+
+      const subject = `Website message from ${name || email || 'Website Visitor'}`;
+      const bodyLines = [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        '',
+        'Message:',
+        message
+      ];
+      const body = bodyLines.join('\n');
+
+      // Build mailto link and try to open the user's default mail client.
+      const mailtoLink = `mailto:hello@profetix.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      // Open mail client. Note: this relies on the visitor having a configured mail client.
+      window.location.href = mailtoLink;
+
+      // Show a helpful status in-page and reset the form. The user still needs to hit Send in their mail client.
+      formStatus.textContent = 'Your email client should open to send the message. If it does not, please email hello@profetix.com directly.';
       formStatus.style.display = 'block';
       form.reset();
     });
