@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profetix FocusFlow – Study Session Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Profetix FocusFlow helps you plan, focus, and reflect on structured study sessions."
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          <span class="brand-name">Profetix</span>
+          <span class="brand-sub">FocusFlow</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="tagline">
+          Plan. Focus. Reflect. <span class="pill pill-outline">Student Edition</span>
+        </div>
+
+        <button id="themeToggleBtn" class="btn btn-ghost" type="button">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+          <span id="themeLabel">Light</span> mode
+        </button>
+      </div>
+    </header>
+
+    <main class="layout-grid">
+      <!-- Column 1: Planner -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Create Session</h2>
+          <p class="panel-subtitle">
+            Set up a focused block of time with a clear plan.
+          </p>
+        </div>
+
+        <form id="sessionForm" class="card card-filled">
+          <div class="form-field">
+            <label for="sessionTitle">Session title</label>
+            <input id="sessionTitle" type="text" required placeholder="e.g. Calculus practice" />
+          </div>
+
+          <div class="form-field">
+            <label for="sessionSubject">Subject</label>
+            <input id="sessionSubject" type="text" required placeholder="e.g. Math" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="sessionDuration">Focus duration (min)</label>
+              <input id="sessionDuration" type="number" min="5" max="240" value="50" required />
+            </div>
+            <div class="form-field">
+              <label for="sessionBreak">Break length (min)</label>
+              <input id="sessionBreak" type="number" min="0" max="60" value="10" required />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="sessionTasks">Tasks (one per line)</label>
+            <textarea
+              id="sessionTasks"
+              rows="4"
+              placeholder="• Read chapter 3&#10;• Do 10 practice questions"
+            ></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">
+            Create session
+          </button>
+        </form>
+
+        <section class="card">
+          <header class="card-header">
+            <h3>Today’s sessions</h3>
+            <span id="todayDate" class="badge"></span>
+          </header>
+          <div id="sessionsList" class="session-list empty-state">
+            <p>No sessions yet. Create one above to get started.</p>
+          </div>
+        </section>
+      </section>
+
+      <!-- Column 2: Timer & Distractions -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Focus Timer</h2>
+          <p class="panel-subtitle">
+            Stay on track and log distractions as they happen.
+          </p>
+        </div>
+
+        <section class="card timer-card">
+          <header class="card-header">
+            <div>
+              <div class="label-sm">Active session</div>
+              <h3 id="activeSessionTitle">None selected</h3>
+              <p id="activeSessionSubject" class="muted"></p>
+            </div>
+            <button id="endEarlyBtn" class="btn btn-ghost btn-sm" type="button" disabled>
+              End session
+            </button>
+          </header>
+
+          <div class="timer-layout">
+            <div class="timer-visual">
+              <div class="progress-ring">
+                <svg width="160" height="160">
+                  <circle
+                    class="progress-ring__background"
+                    cx="80"
+                    cy="80"
+                    r="70"
+                  ></circle>
+                  <circle
+                    class="progress-ring__progress"
+                    id="progressRing"
+                    cx="80"
+                    cy="80"
+                    r="70"
+                  ></circle>
+                </svg>
+                <div class="timer-display">
+                  <div id="timeRemainingDisplay">00:00</div>
+                  <span id="timerPhaseLabel" class="label-sm">Idle</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="timer-controls">
+              <div class="button-row">
+                <button id="startBtn" class="btn btn-primary btn-lg" type="button" disabled>
+                  Start
+                </button>
+                <button id="pauseBtn" class="btn btn-outline btn-lg" type="button" disabled>
+                  Pause
+                </button>
+              </div>
+              <div class="timer-meta">
+                <div>
+                  <span class="label-sm">Planned focus</span>
+                  <div id="plannedMinutes" class="value-lg">–</div>
+                </div>
+                <div>
+                  <span class="label-sm">Elapsed</span>
+                  <div id="elapsedMinutes" class="value-lg">0 min</div>
+                </div>
+                <div>
+                  <span class="label-sm">Break</span>
+                  <div id="breakMinutes" class="value-lg">–</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="distraction-section">
+            <header class="card-subheader">
+              <h4>Distraction logger</h4>
+              <span class="muted">Tap whenever your focus breaks.</span>
+            </header>
+            <div class="button-row">
+              <button class="pill" data-distraction="Phone">📱 Phone</button>
+              <button class="pill" data-distraction="Social Media">💬 Social</button>
+              <button class="pill" data-distraction="Chatting">🗣 Chatting</button>
+              <button class="pill" data-distraction="Other">✨ Other</button>
+            </div>
+            <ul id="distractionList" class="distraction-list empty-state">
+              <li>No distractions logged yet.</li>
+            </ul>
+          </section>
+        </section>
+      </section>
+
+      <!-- Column 3: History & Stats -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>History & Insights</h2>
+          <p class="panel-subtitle">
+            See how your focus evolves across subjects and sessions.
+          </p>
+        </div>
+
+        <section class="card">
+          <header class="card-header">
+            <h3>Session history</h3>
+          </header>
+          <div class="history-wrapper">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Title</th>
+                  <th>Subject</th>
+                  <th>Planned</th>
+                  <th>Focused</th>
+                  <th>Distractions</th>
+                  <th>Rating</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody">
+                <tr class="empty-row">
+                  <td colspan="7">No completed sessions yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <header class="card-header">
+            <h3>Focus by subject</h3>
+            <span class="muted">Total focused minutes</span>
+          </header>
+          <div class="chart-wrapper">
+            <canvas id="subjectChart"></canvas>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- Reflection Modal -->
+  <div id="reflectionOverlay" class="overlay hidden">
+    <div class="overlay-backdrop"></div>
+    <div class="overlay-content card card-filled">
+      <h2>Reflection – <span id="reflectionSessionTitle"></span></h2>
+      <p class="muted">
+        Take 30 seconds to note how this session went. Future you will thank you.
+      </p>
+
+      <form id="reflectionForm">
+        <div class="form-field">
+          <label>Focus rating (1–5)</label>
+          <div class="rating-row">
+            <label><input type="radio" name="rating" value="1" required /> 1</label>
+            <label><input type="radio" name="rating" value="2" /> 2</label>
+            <label><input type="radio" name="rating" value="3" /> 3</label>
+            <label><input type="radio" name="rating" value="4" /> 4</label>
+            <label><input type="radio" name="rating" value="5" /> 5</label>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="reflectionWentWell">What went well?</label>
+          <textarea id="reflectionWentWell" rows="3"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="reflectionImprove">What will you change next time?</label>
+          <textarea id="reflectionImprove" rows="3"></textarea>
+        </div>
+
+        <div class="button-row right">
+          <button class="btn btn-ghost" type="button" id="reflectionSkipBtn">
+            Skip
+          </button>
+          <button class="btn btn-primary" type="submit">
+            Save reflection
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
