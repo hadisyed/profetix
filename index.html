@@ -1,519 +1,281 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PROFETIX — Intelligence for Human Progress</title>
-  <meta name="description" content="PROFETIX is an AI innovation studio creating intelligent digital products that amplify human potential." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- You can swap to Inter / Manrope / Satoshi if you have self-hosted -->
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #0a0c10;
-      --card: rgba(13, 15, 20, 0.6);
-      --text: #ffffff;
-      --muted: rgba(255, 255, 255, 0.55);
-      --border: rgba(255, 255, 255, 0.08);
-      --accent: #00e0ff;
-      --radius-lg: 1.6rem;
-      --shadow-lg: 0 24px 80px rgba(0, 0, 0, 0.35);
-      --max-width: 1180px;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #131722 0%, #06070b 45%, #030304 75%);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-      background: radial-gradient(circle at top, rgba(10, 12, 16, 0.7), rgba(10, 12, 16, 0.2));
-    }
-    .nav {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.5rem;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .logo-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      background: radial-gradient(circle, rgba(0, 224, 255, 1) 0%, rgba(0, 224, 255, 0) 65%);
-      border: 1px solid rgba(0, 224, 255, 0.25);
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: 0.7rem;
-      letter-spacing: .1em;
-    }
-    .logo-text {
-      font-weight: 700;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      font-size: .8rem;
-    }
-    .nav-links {
-      display: flex;
-      gap: 1.25rem;
-      align-items: center;
-    }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: .25s ease;
-    }
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: #fff;
-    }
-    .btn-primary {
-      background: linear-gradient(120deg, #15ebff 0%, #00b5ff 100%);
-      border: none;
-      padding: .55rem 1.1rem;
-      border-radius: 999px;
-      color: #05070a;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .25s ease;
-      font-size: 0.8rem;
-    }
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.03);
-    }
-    .hero {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 5rem 1.5rem 4rem;
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 3rem;
-      align-items: center;
-    }
-    .hero-heading {
-      font-size: clamp(2.4rem, 4vw, 3.2rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.05;
-      margin-bottom: 1.5rem;
-    }
-    .hero-sub {
-      color: var(--muted);
-      max-width: 33rem;
-      margin-bottom: 2.1rem;
-    }
-    .hero-badges {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
-    }
-    .hero-badge {
-      background: radial-gradient(circle, rgba(0, 224, 255, 0.35) 0%, rgba(0, 224, 255, 0) 80%);
-      border: 1px solid rgba(0, 224, 255, 0.24);
-      padding: .35rem 1rem .35rem .35rem;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-      font-size: .7rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-    .hero-badge-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      background: rgba(8, 248, 201, 0.9);
-      box-shadow: 0 0 24px rgba(8, 248, 201, .45);
-    }
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .ghost-btn {
-      background: rgba(255, 255, 255, 0.01);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: .55rem 1.1rem;
-      border-radius: 999px;
-      color: #fff;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      gap: .5rem;
-      align-items: center;
-      font-size: 0.8rem;
-    }
-    .hero-panel {
-      background: radial-gradient(circle at 6% 20%, rgba(0, 224, 255, .16), rgba(7,9,14,1));
-      border: 1px solid rgba(255, 255, 255, 0.02);
-      border-radius: 1.5rem;
-      padding: 1.2rem 1.2rem 1.4rem;
-      box-shadow: var(--shadow-lg);
-    }
-    .panel-title {
-      font-size: .7rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: rgba(255, 255, 255, .5);
-      margin-bottom: 1.2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .panel-title small {
-      font-size: .6rem;
-    }
-    .grid {
-      display: grid;
-      gap: 1rem;
-    }
-    .signal-box {
-      background: rgba(13, 17, 26, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.02);
-      border-radius: 1rem;
-      padding: .8rem .9rem 1rem;
-    }
-    .signal-label {
-      font-size: .68rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: rgba(255, 255, 255, .5);
-      margin-bottom: .4rem;
-    }
-    .signal-value {
-      font-size: 1.65rem;
-      font-weight: 700;
-      margin-bottom: .4rem;
-    }
-    .signal-sub {
-      font-size: .6rem;
-      color: rgba(255,255,255, .35);
-    }
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: rgba(255,255,255, 0.05);
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: .6rem;
-    }
-    .progress {
-      height: 100%;
-      background: linear-gradient(120deg, #0ff 0%, #5a79ff 100%);
-      width: 65%;
-      border-radius: 999px;
-      transition: width 1s ease;
-    }
-    section {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 3.5rem 1.5rem 3.5rem;
-    }
-    .section-title {
-      font-size: 2rem;
-      margin-bottom: .75rem;
-    }
-    .section-sub {
-      max-width: 44rem;
-      color: var(--muted);
-      margin-bottom: 2.5rem;
-    }
-    .three-cols {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1.3rem;
-    }
-    .card {
-      background: rgba(10, 12, 16, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.02);
-      border-radius: 1.35rem;
-      padding: 1.2rem 1.1rem 1.35rem;
-      backdrop-filter: blur(6px);
-    }
-    .card small {
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      font-size: .6rem;
-      color: rgba(255, 255, 255, 0.45);
-    }
-    .card h3 {
-      margin-top: .5rem;
-      margin-bottom: .5rem;
-    }
-    .footer {
-      border-top: 1px solid rgba(255, 255, 255, .02);
-      padding: 2.2rem 1.5rem 3.2rem;
-      color: rgba(255, 255, 255, 0.4);
-      text-align: center;
-      font-size: .7rem;
-    }
-    @media (max-width: 980px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-      .nav-links {
-        display: none;
-      }
-      .three-cols {
-        grid-template-columns: 1fr;
-      }
-      .hero-heading {
-        font-size: 2.5rem;
-      }
-    }
-  </style>
+  <title>Profetix FocusFlow – Study Session Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Profetix FocusFlow helps you plan, focus, and reflect on structured study sessions."
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <div class="nav">
-      <div class="logo">
-        <div class="logo-circle">PX</div>
-        <div class="logo-text">PROFETIX</div>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          <span class="brand-name">Profetix</span>
+          <span class="brand-sub">FocusFlow</span>
+        </div>
       </div>
-      <nav class="nav-links">
-        <a href="#about" class="active">About</a>
-        <a href="#capabilities">Capabilities</a>
-        <a href="#approach">Approach</a>
-        <a href="#contact">Contact</a>
-        <button class="btn-primary" onclick="scrollToContact()">Work with us</button>
-      </nav>
-    </div>
-  </header>
 
-  <main>
-    <section class="hero" id="home">
-      <div>
-        <div class="hero-badges">
-          <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            AI-First Studio
-          </div>
-          <div class="hero-badge">
-            <span class="hero-badge-dot" style="background: rgba(255, 164, 27, .9); box-shadow: 0 0 24px rgba(255, 164, 27, .6)"></span>
-            Product Innovation
-          </div>
+      <div class="header-actions">
+        <div class="tagline">
+          Plan. Focus. Reflect. <span class="pill pill-outline">Student Edition</span>
         </div>
-        <h1 class="hero-heading">Intelligence for human progress.</h1>
-        <p class="hero-sub">
-          PROFETIX designs and builds AI-powered digital products that help people learn, communicate, and grow — with clarity, empathy, and precision.
-        </p>
-        <div class="hero-cta">
-          <button class="btn-primary" onclick="scrollToContact()">Start a project</button>
-          <button class="ghost-btn" onclick="scrollToAbout()">Explore the studio →</button>
-        </div>
+
+        <button id="themeToggleBtn" class="btn btn-ghost" type="button">
+          <span class="theme-icon" id="themeIcon">☀️</span>
+          <span id="themeLabel">Light</span> mode
+        </button>
       </div>
-      <div class="hero-panel" aria-label="PROFETIX activity panel">
-        <div class="panel-title">
-          <span>Studio Signal • Live</span>
-          <small id="studioTime"></small>
+    </header>
+
+    <main class="layout-grid">
+      <!-- Column 1: Planner -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Create Session</h2>
+          <p class="panel-subtitle">
+            Set up a focused block of time with a clear plan.
+          </p>
         </div>
-        <div class="grid">
-          <div class="signal-box">
-            <div class="signal-label">Active initiatives</div>
-            <div class="signal-value" id="activeProjects">7</div>
-            <div class="signal-sub">New product explorations in language, learning, and personalization.</div>
-            <div class="progress-bar">
-              <div class="progress" id="prog1"></div>
+
+        <form id="sessionForm" class="card card-filled">
+          <div class="form-field">
+            <label for="sessionTitle">Session title</label>
+            <input id="sessionTitle" type="text" required placeholder="e.g. Calculus practice" />
+          </div>
+
+          <div class="form-field">
+            <label for="sessionSubject">Subject</label>
+            <input id="sessionSubject" type="text" required placeholder="e.g. Math" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="sessionDuration">Focus duration (min)</label>
+              <input id="sessionDuration" type="number" min="5" max="240" value="50" required />
+            </div>
+            <div class="form-field">
+              <label for="sessionBreak">Break length (min)</label>
+              <input id="sessionBreak" type="number" min="0" max="60" value="10" required />
             </div>
           </div>
-          <div class="signal-box">
-            <div class="signal-label">AI components reused</div>
-            <div class="signal-value" id="componentsCount">36</div>
-            <div class="signal-sub">Shared intelligence across experiences.</div>
-            <div class="progress-bar">
-              <div class="progress" style="width: 82%;" id="prog2"></div>
+
+          <div class="form-field">
+            <label for="sessionTasks">Tasks (one per line)</label>
+            <textarea
+              id="sessionTasks"
+              rows="4"
+              placeholder="• Read chapter 3&#10;• Do 10 practice questions"
+            ></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">
+            Create session
+          </button>
+        </form>
+
+        <section class="card">
+          <header class="card-header">
+            <h3>Today’s sessions</h3>
+            <span id="todayDate" class="badge"></span>
+          </header>
+          <div id="sessionsList" class="session-list empty-state">
+            <p>No sessions yet. Create one above to get started.</p>
+          </div>
+        </section>
+      </section>
+
+      <!-- Column 2: Timer & Distractions -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Focus Timer</h2>
+          <p class="panel-subtitle">
+            Stay on track and log distractions as they happen.
+          </p>
+        </div>
+
+        <section class="card timer-card">
+          <header class="card-header">
+            <div>
+              <div class="label-sm">Active session</div>
+              <h3 id="activeSessionTitle">None selected</h3>
+              <p id="activeSessionSubject" class="muted"></p>
+            </div>
+            <button id="endEarlyBtn" class="btn btn-ghost btn-sm" type="button" disabled>
+              End session
+            </button>
+          </header>
+
+          <div class="timer-layout">
+            <div class="timer-visual">
+              <div class="progress-ring">
+                <svg width="160" height="160">
+                  <circle
+                    class="progress-ring__background"
+                    cx="80"
+                    cy="80"
+                    r="70"
+                  ></circle>
+                  <circle
+                    class="progress-ring__progress"
+                    id="progressRing"
+                    cx="80"
+                    cy="80"
+                    r="70"
+                  ></circle>
+                </svg>
+                <div class="timer-display">
+                  <div id="timeRemainingDisplay">00:00</div>
+                  <span id="timerPhaseLabel" class="label-sm">Idle</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="timer-controls">
+              <div class="button-row">
+                <button id="startBtn" class="btn btn-primary btn-lg" type="button" disabled>
+                  Start
+                </button>
+                <button id="pauseBtn" class="btn btn-outline btn-lg" type="button" disabled>
+                  Pause
+                </button>
+              </div>
+              <div class="timer-meta">
+                <div>
+                  <span class="label-sm">Planned focus</span>
+                  <div id="plannedMinutes" class="value-lg">–</div>
+                </div>
+                <div>
+                  <span class="label-sm">Elapsed</span>
+                  <div id="elapsedMinutes" class="value-lg">0 min</div>
+                </div>
+                <div>
+                  <span class="label-sm">Break</span>
+                  <div id="breakMinutes" class="value-lg">–</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="signal-box">
-            <div class="signal-label">Human-centric score</div>
-            <div class="signal-value" id="scoreValue">9.4</div>
-            <div class="signal-sub">Evaluated on clarity, accessibility, and delight.</div>
-            <div class="progress-bar">
-              <div class="progress" style="width: 94%;" id="prog3"></div>
+
+          <section class="distraction-section">
+            <header class="card-subheader">
+              <h4>Distraction logger</h4>
+              <span class="muted">Tap whenever your focus breaks.</span>
+            </header>
+            <div class="button-row">
+              <button class="pill" data-distraction="Phone">📱 Phone</button>
+              <button class="pill" data-distraction="Social Media">💬 Social</button>
+              <button class="pill" data-distraction="Chatting">🗣 Chatting</button>
+              <button class="pill" data-distraction="Other">✨ Other</button>
             </div>
+            <ul id="distractionList" class="distraction-list empty-state">
+              <li>No distractions logged yet.</li>
+            </ul>
+          </section>
+        </section>
+      </section>
+
+      <!-- Column 3: History & Stats -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>History & Insights</h2>
+          <p class="panel-subtitle">
+            See how your focus evolves across subjects and sessions.
+          </p>
+        </div>
+
+        <section class="card">
+          <header class="card-header">
+            <h3>Session history</h3>
+          </header>
+          <div class="history-wrapper">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Title</th>
+                  <th>Subject</th>
+                  <th>Planned</th>
+                  <th>Focused</th>
+                  <th>Distractions</th>
+                  <th>Rating</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody">
+                <tr class="empty-row">
+                  <td colspan="7">No completed sessions yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <header class="card-header">
+            <h3>Focus by subject</h3>
+            <span class="muted">Total focused minutes</span>
+          </header>
+          <div class="chart-wrapper">
+            <canvas id="subjectChart"></canvas>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- Reflection Modal -->
+  <div id="reflectionOverlay" class="overlay hidden">
+    <div class="overlay-backdrop"></div>
+    <div class="overlay-content card card-filled">
+      <h2>Reflection – <span id="reflectionSessionTitle"></span></h2>
+      <p class="muted">
+        Take 30 seconds to note how this session went. Future you will thank you.
+      </p>
+
+      <form id="reflectionForm">
+        <div class="form-field">
+          <label>Focus rating (1–5)</label>
+          <div class="rating-row">
+            <label><input type="radio" name="rating" value="1" required /> 1</label>
+            <label><input type="radio" name="rating" value="2" /> 2</label>
+            <label><input type="radio" name="rating" value="3" /> 3</label>
+            <label><input type="radio" name="rating" value="4" /> 4</label>
+            <label><input type="radio" name="rating" value="5" /> 5</label>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section id="about">
-      <h2 class="section-title">About the studio</h2>
-      <p class="section-sub">
-        PROFETIX is an independent AI innovation studio. We partner with founders, educators, and future-focused teams to build intelligent products — from concept to launch. Our work blends robust AI systems with human-centered design.
-      </p>
-      <div class="three-cols">
-        <div class="card">
-          <small>Philosophy</small>
-          <h3>Human-first intelligence</h3>
-          <p>We believe AI should amplify, not replace, human capability. Every product begins with people, not with models.</p>
+        <div class="form-field">
+          <label for="reflectionWentWell">What went well?</label>
+          <textarea id="reflectionWentWell" rows="3"></textarea>
         </div>
-        <div class="card">
-          <small>Focus</small>
-          <h3>Learning & communication</h3>
-          <p>We specialize in experiences that make people smarter — language, knowledge, creativity, and expression.</p>
-        </div>
-        <div class="card">
-          <small>Delivery</small>
-          <h3>Idea → Interface → Launch</h3>
-          <p>Research, product strategy, UX, conversational design, and lightweight engineering in one studio.</p>
-        </div>
-      </div>
-    </section>
 
-    <section id="capabilities">
-      <h2 class="section-title">What we build</h2>
-      <p class="section-sub">
-        AI-native products that are fast to ship, simple to use, and ready to scale.
-      </p>
-      <div class="three-cols">
-        <div class="card">
-          <small>01</small>
-          <h3>Conversational AI</h3>
-          <p>Chat experiences, voice assistants, and language tools powered by LLMs — designed to feel natural.</p>
+        <div class="form-field">
+          <label for="reflectionImprove">What will you change next time?</label>
+          <textarea id="reflectionImprove" rows="3"></textarea>
         </div>
-        <div class="card">
-          <small>02</small>
-          <h3>Learning systems</h3>
-          <p>Adaptive lessons, feedback loops, and assessment engines for education, onboarding, or coaching.</p>
-        </div>
-        <div class="card">
-          <small>03</small>
-          <h3>Intelligent dashboards</h3>
-          <p>Interfaces that prioritize clarity — signals, automation triggers, and human-in-the-loop control.</p>
-        </div>
-      </div>
-    </section>
 
-    <section id="approach">
-      <h2 class="section-title">How we work</h2>
-      <p class="section-sub">
-        A lightweight, R&D-informed process that balances experimentation with delivery.
-      </p>
-      <div class="three-cols">
-        <div class="card">
-          <small>Phase 1</small>
-          <h3>Discovery & framing</h3>
-          <p>We identify the user, problem, and AI opportunity — and define success metrics.</p>
+        <div class="button-row right">
+          <button class="btn btn-ghost" type="button" id="reflectionSkipBtn">
+            Skip
+          </button>
+          <button class="btn btn-primary" type="submit">
+            Save reflection
+          </button>
         </div>
-        <div class="card">
-          <small>Phase 2</small>
-          <h3>Prototyping</h3>
-          <p>We build interactive flows, define prompts, and test with real users.</p>
-        </div>
-        <div class="card">
-          <small>Phase 3</small>
-          <h3>Launch & evolve</h3>
-          <p>We release early, monitor usage, and evolve the experience with data.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact">
-      <h2 class="section-title">Start something with PROFETIX</h2>
-      <p class="section-sub">
-        Tell us about the product you want to build — language, education, or intelligent UX — and we’ll get back to you with a plan.
-      </p>
-      <form id="contactForm" class="card" style="max-width: 540px;">
-        <label for="name">Name</label><br/>
-        <input id="name" name="name" type="text" placeholder="Your name" required
-               style="width: 100%; margin-bottom: .9rem; margin-top:.2rem; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.06); border-radius: .6rem; padding: .6rem .55rem; color: #fff;">
-        <label for="email">Email</label><br/>
-        <input id="email" name="email" type="email" placeholder="you@example.com" required
-               style="width: 100%; margin-bottom: .9rem; margin-top:.2rem; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.06); border-radius: .6rem; padding: .6rem .55rem; color: #fff;">
-        <label for="message">What would you like to build?</label><br/>
-        <textarea id="message" name="message" rows="4" placeholder="Describe your AI product or challenge..." required
-                  style="width: 100%; margin-bottom: .9rem; margin-top:.2rem; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.06); border-radius: .6rem; padding: .6rem .55rem; color: #fff; resize: vertical;"></textarea>
-        <button type="submit" class="btn-primary">Submit message</button>
-        <p id="formStatus" style="color: rgba(255,255,255,0.6); font-size: .7rem; margin-top: .6rem; display:none;">Thanks — we received your message.</p>
       </form>
-    </section>
-  </main>
+    </div>
+  </div>
 
-  <footer class="footer">
-    © <span id="year"></span> PROFETIX. All rights reserved.
-  </footer>
-
-  <script>
-    // dynamic time in hero panel
-    function updateStudioTime() {
-      const el = document.getElementById('studioTime');
-      const now = new Date();
-      el.textContent = now.toUTCString();
-    }
-    updateStudioTime();
-    setInterval(updateStudioTime, 60000);
-
-    // smooth scroll helpers
-    function scrollToContact() {
-      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-    }
-    function scrollToAbout() {
-      document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // contact submission — open user's email client to send to hello@profetix.com
-    const form = document.getElementById('contactForm');
-    const formStatus = document.getElementById('formStatus');
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = (form.name && form.name.value) ? form.name.value.trim() : '';
-      const email = (form.email && form.email.value) ? form.email.value.trim() : '';
-      const message = (form.message && form.message.value) ? form.message.value.trim() : '';
-
-      const subject = `Website message from ${name || email || 'Website Visitor'}`;
-      const bodyLines = [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        '',
-        'Message:',
-        message
-      ];
-      const body = bodyLines.join('\n');
-
-      // Build mailto link and try to open the user's default mail client.
-      const mailtoLink = `mailto:hello@profetix.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-      // Open mail client. Note: this relies on the visitor having a configured mail client.
-      window.location.href = mailtoLink;
-
-      // Show a helpful status in-page and reset the form. The user still needs to hit Send in their mail client.
-      formStatus.textContent = 'Your email client should open to send the message. If it does not, please email hello@profetix.com directly.';
-      formStatus.style.display = 'block';
-      form.reset();
-    });
-
-    // year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // animate progress bars on load
-    window.addEventListener('load', () => {
-      document.getElementById('prog1').style.width = '76%';
-      document.getElementById('prog2').style.width = '88%';
-      document.getElementById('prog3').style.width = '94%';
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
