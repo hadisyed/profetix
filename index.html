@@ -464,9 +464,11 @@
       <p class="muted">Tell me what you’re trying to fix or improve. I’ll recommend a next step.</p>
       <div class="two-col" style="align-items:flex-start;margin-top:1.8rem;">
         <div class="contact-card" style="background:rgba(15,23,42,0.5);">
-          <form action="https://formsubmit.co/hello@profetix.com" method="POST" onsubmit="handleSubmit(event)">
-            <!-- <input type="hidden" name="_subject" value="New Profetix Consultation Request">
-            <input type="hidden" name="_next" value="https://profetix.com/thanks.html">
+          <form action="https://formsubmit.co/hello@profetix.com" method="POST">
+            <input type="hidden" name="_subject" value="New Profetix Consultation Request">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+            <input type="text" name="_honey" style="display:none">
             <div>
               <label for="name">Your name</label>
               <input type="text" id="name" name="name" placeholder="e.g. Sarah from NovaTech" required />
@@ -480,14 +482,31 @@
               <textarea id="message" name="message" placeholder="Describe the computer/IT issue, or what you're planning..." required></textarea>
             </div>
             <button type="submit" class="btn-primary" style="width:max-content;">Send to Profetix →</button>
-            <p id="formMessage" style="font-size:0.75rem;color:var(--muted);margin-top:0.6rem;"></p> -->
-          <!-- </form>
-        </div> -->
+          </form>
+        </div>
         <div>
           <h3 style="margin-bottom:0.6rem;">Contact details</h3>
           <p class="muted" style="margin-bottom:0.7rem;">Email: <a href="mailto:hello@profetix.com" style="color:#fff;">hello@profetix.com</a> </p>
           <p class="muted">Preferred areas: computer setup, IT strategy, troubleshooting, network performance.</p>
         </div>
+      </div>
+    </section>
+
+    <section id="newsletter" style="text-align: center;">
+      <h2 class="section-title">Stay Updated</h2>
+      <p class="muted">Subscribe to receive technology tips and updates from Profetix.</p>
+      <div class="contact-card" style="max-width: 500px; margin: 2rem auto;">
+        <form action="https://formsubmit.co/hello@profetix.com" method="POST">
+          <input type="hidden" name="_subject" value="New Newsletter Subscription">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="text" name="_honey" style="display:none">
+          <div>
+            <label for="subscriber-email">Email Address</label>
+            <input type="email" id="subscriber-email" name="email" placeholder="you@example.com" required />
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%; margin-top:1rem;">Subscribe</button>
+        </form>
       </div>
     </section>
   </main>
