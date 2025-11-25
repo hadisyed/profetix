@@ -339,8 +339,21 @@
       }
     }
   </style>
+  <head>
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeWIxgsAAAAAH_QX7hRJxIV1Ra-ljSNlrKRhqd5"></script>
+  <!-- Your code -->
+</head>
 </head>
 <body>
+  <script>
+  function onClick(e) {
+    e.preventDefault();
+    grecaptcha.enterprise.ready(async () => {
+      const token = await grecaptcha.enterprise.execute('6LeWIxgsAAAAAH_QX7hRJxIV1Ra-ljSNlrKRhqd5', {action: 'LOGIN'});
+    });
+  }
+</script>
+  
   <header>
     <div class="nav">
       <div class="logo">
