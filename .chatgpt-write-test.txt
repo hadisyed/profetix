@@ -1,0 +1,2 @@
+GitHub connector write permission test for Profetix.
+No website files were modified.
