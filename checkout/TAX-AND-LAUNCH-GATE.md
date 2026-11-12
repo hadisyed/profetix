@@ -1,12 +1,13 @@
 # Profetix tax and payment launch gate
 **State: HOLD — not authorized for live sales.**
-Business owner reports Profetix is **not registered for GST/HST**. Do not represent this as a determination that tax is never owed.
+Business owner reports Profetix is **not registered for GST/HST** and has approximately **CA$0 in taxable revenue over the last 12 months**. This is consistent with small-supplier status if there are no associated-person supplies or other special circumstances. Do not represent this as a determination that tax is never owed.
 
 ## Canadian GST/HST
 For most Canadian businesses, CRA's small-supplier threshold is CA$30,000 of worldwide taxable supplies in a single calendar quarter or across four consecutive calendar quarters (subject to details and associated-person rules). Review CRA guidance and verify business-specific facts before launch:
 https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html
 
-- [ ] Confirm revenue from worldwide taxable supplies in current quarter and prior four calendar quarters, including any associated businesses.
+- [x] Owner reports CA$0 taxable revenue over last 12 months (self-reported, not independently verified).
+- [ ] Confirm worldwide taxable supplies in each relevant calendar quarter, including any associated persons or businesses.
 - [ ] Confirm whether mandatory registration applies, and whether voluntary registration is planned.
 - [ ] Determine treatment of Canadian and international digital product sales, including other jurisdictions.
 - [ ] Confirm pricing display, invoice/receipt wording, refund policy, terms, and product license.
