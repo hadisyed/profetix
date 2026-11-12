@@ -1,0 +1,12 @@
+# Deployment Checklist
+- [ ] Choose CRM/sheet with restricted access, retention policy, and backups.
+- [ ] Confirm form delivery and spam prevention.
+- [ ] Add consent and privacy notices suitable for actual data handling.
+- [ ] Map required fields; minimize personal data.
+- [ ] Test 5 synthetic leads, including missing fields and duplicates.
+- [ ] Assign human review for scoring and replies.
+- [ ] Set up unsubscribe and deletion request handling before marketing.
+- [ ] Verify email authentication and sender identity.
+- [ ] Test failed delivery, retry, and duplicate suppression.
+- [ ] Document monthly costs and responsible operator.
+- [ ] Conduct security and CASL/privacy review before production use.

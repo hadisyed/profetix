@@ -1,0 +1,28 @@
+{
+  "status": "draft_only_do_not_activate",
+  "currency": "cad",
+  "tax": "unconfirmed_do_not_collect_gst_hst_without_review",
+  "products": [
+    {
+      "slug": "starter-kit",
+      "name": "Profetix AI Business Starter Kit",
+      "unit_amount": 4900,
+      "delivery": "private ZIP after confirmed payment",
+      "price_type": "one_time"
+    },
+    {
+      "slug": "automation-toolkit",
+      "name": "Profetix AI Automation Toolkit",
+      "unit_amount": 19900,
+      "delivery": "private ZIP after confirmed payment",
+      "price_type": "one_time"
+    }
+  ],
+  "custom_service": {
+    "name": "Profetix Custom AI Business Solutions",
+    "starting_price_cad": 999,
+    "checkout": "manual proposal and invoice after signed scope"
+  },
+  "checkout_links": "not_created",
+  "production_enabled": false
+}
