@@ -1,10 +1,10 @@
 import express from 'express';
 import Stripe from 'stripe';
-import {createReadStream,existsSync} from 'node:fs';
-import {resolve} from 'node:path';
+import {S3Client, GetObjectCommand} from '@aws-sdk/client-s3';
+import {pipeline} from 'node:stream/promises';
 const app=express();
 const stripe=new Stripe(process.env.STRIPE_SECRET_KEY||'sk_test_unconfigured');
-const required=['STRIPE_SECRET_KEY','STRIPE_WEBHOOK_SECRET','STRIPE_STARTER_PAYMENT_LINK_ID','STRIPE_AUTOMATION_PAYMENT_LINK_ID','PUBLIC_BASE_URL','RESEND_API_KEY','DELIVERY_FROM_EMAIL'];
+const required=['STRIPE_SECRET_KEY','STRIPE_WEBHOOK_SECRET','STRIPE_STARTER_PAYMENT_LINK_ID','STRIPE_AUTOMATION_PAYMENT_LINK_ID','PUBLIC_BASE_URL','RESEND_API_KEY','DELIVERY_FROM_EMAIL','R2_ACCESS_KEY_ID','R2_SECRET_ACCESS_KEY','R2_ENDPOINT','R2_BUCKET_NAME'];
 const configured=()=>required.every(k=>process.env[k]&&!/REPLACE_ME|YOUR-/.test(process.env[k]));
 const products=()=>({
  [process.env.STRIPE_STARTER_PAYMENT_LINK_ID]:{name:'AI Business Starter Kit',file:'starter-kit.zip'},
@@ -37,11 +37,19 @@ app.get('/api/download',async(req,res)=>{
   const session=await stripe.checkout.sessions.retrieve(id);
   if(!paid(session))return res.status(403).send('Payment not verified');
   if(Date.now()-session.created*1000>7*86400000)return res.status(410).send('Expired; contact support');
-  const product=getProduct(session),file=resolve('private',product.file);
-  if(!existsSync(file))return res.status(503).send('Package not yet available; contact support');
+  const product=getProduct(session);
+  const client=new S3Client({region:'auto',endpoint:process.env.R2_ENDPOINT,credentials:{accessKeyId:process.env.R2_ACCESS_KEY_ID,secretAccessKey:process.env.R2_SECRET_ACCESS_KEY}});
+  let object;
+  try {
+   object=await client.send(new GetObjectCommand({Bucket:process.env.R2_BUCKET_NAME,Key:product.file}));
+   if(!object.Body)throw Error('Empty object response');
+  } catch(e) {
+   console.error('R2 download failed:',e.name);
+   return res.status(503).send('Package unavailable; contact support');
+  }
   res.set({'Cache-Control':'private, no-store','Content-Type':'application/zip','Content-Disposition':'attachment; filename="'+product.file+'"'});
-  createReadStream(file).pipe(res);
- }catch(e){console.error(e.message);return res.status(503).send('Unable to verify payment')}
+  await pipeline(object.Body,res);
+ }catch(e){console.error(e.name);if(res.headersSent){res.destroy();return;}return res.status(503).send('Unable to complete download')}
 });
 app.get('/health',(_req,res)=>res.json({service:'profetix-delivery',configured:configured()}));
 app.listen(Number(process.env.PORT)||3000);
