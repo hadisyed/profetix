@@ -1,38 +1,25 @@
 
 import { collectJobs } from './collector.mjs';
 import { pathToFileURL } from 'node:url';
+import { assessOpportunity } from './scoring.mjs';
 
 export function filterRelevantJobs(jobs) {
-  const patterns = [
-    {
-      pattern: /\b(administrative|administrator|operations)\b/i,
-      opportunity: 'Workflow automation'
-    },
-    {
-      pattern: /\b(customer support|customer service)\b/i,
-      opportunity: 'Customer support automation'
-    },
-    {
-      pattern: /\b(marketing|content)\b/i,
-      opportunity: 'Marketing automation'
-    },
-    {
-      pattern: /\b(data entry|office assistant|coordinator)\b/i,
-      opportunity: 'Administrative automation'
-    }
-  ];
+  if (!Array.isArray(jobs)) {
+    throw new Error('Jobs must be an array');
+  }
 
   return jobs.flatMap(job => {
-    if (typeof job.title !== 'string') return [];
+    if (!job || typeof job !== 'object') {
+      return [];
+    }
 
-    const match = patterns.find(
-      rule => rule.pattern.test(job.title)
-    );
+    const match = assessOpportunity(job.title);
 
     if (!match) return [];
 
     return [{
       ...job,
+      fit: match.fit,
       suggestedOpportunity: match.opportunity,
       status: 'manual review required',
       outreachAuthorized: false

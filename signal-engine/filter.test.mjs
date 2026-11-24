@@ -5,7 +5,7 @@ import { filterRelevantJobs } from './filter.mjs';
 
 test('identifies workflow automation signals', () => {
   const result = filterRelevantJobs([
-    { title: 'Administrative Coordinator' }
+    { title: 'Operations Manager' }
   ]);
 
   assert.equal(result.length, 1);
@@ -59,4 +59,55 @@ test('preserves manual review safeguards', () => {
   assert.equal(result[0].company, 'Example Company');
   assert.equal(result[0].status, 'manual review required');
   assert.equal(result[0].outreachAuthorized, false);
+});
+
+test('prioritizes specific administrative roles', () => {
+  const result = filterRelevantJobs([
+    { title: 'Administrative Coordinator' }
+  ]);
+
+  assert.equal(result.length, 1);
+  assert.equal(result[0].fit, 25);
+  assert.equal(
+    result[0].suggestedOpportunity,
+    'Administrative automation'
+  );
+});
+
+test('aligns overlapping marketing and operations rules', () => {
+  const result = filterRelevantJobs([
+    { title: 'Marketing Operations Manager' }
+  ]);
+
+  assert.equal(result.length, 1);
+  assert.equal(result[0].fit, 15);
+  assert.equal(
+    result[0].suggestedOpportunity,
+    'Marketing automation'
+  );
+});
+
+test('handles malformed job records safely', () => {
+  const result = filterRelevantJobs([
+    null,
+    undefined,
+    123,
+    {},
+    { title: null },
+    { title: 456 }
+  ]);
+
+  assert.equal(result.length, 0);
+});
+
+test('rejects invalid collection inputs', () => {
+  assert.throws(
+    () => filterRelevantJobs(null),
+    /Jobs must be an array/
+  );
+
+  assert.throws(
+    () => filterRelevantJobs({}),
+    /Jobs must be an array/
+  );
 });

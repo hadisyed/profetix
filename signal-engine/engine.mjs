@@ -2,6 +2,7 @@
 // Usage: node signal-engine/engine.mjs signals.json
 // Input: JSON array of manually collected public business signals.
 // No network requests, outreach, personal data enrichment or paid APIs.
+import { calculateScore } from './scoring.mjs';
 import { readFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 const offers = {
@@ -22,7 +23,12 @@ export function evaluate(s, now = Date.now()) {
   const recency = age <= 30 ? 20 : age <= 90 ? 12 : 4;
   const evidence = {official:20,'third-party':12,unverified:0}[s.evidence];
   const [signal, offer] = offers[s.type];
-  const score = signal+s.fit+recency+evidence;
+  const score = calculateScore({
+  signal,
+  fit: s.fit,
+  recency,
+  evidence
+});
   const priority = !evidence || age > 90 ? 'verify or refresh' : score >= 75 ? 'high' : score >= 50 ? 'medium' : 'low';
   return {company:s.company.trim(),source:url.href,date:s.date,type:s.type,score,priority,
     breakdown:{signal,fit:s.fit,recency,evidence},suggestedOffer:offer,

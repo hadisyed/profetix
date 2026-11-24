@@ -57,3 +57,63 @@ test('preserves manual verification safeguards', () => {
   assert.equal(result[0].priority, 'verify or refresh');
   assert.equal(result[0].breakdown.evidence, 0);
 });
+
+test('rejects malformed company names', () => {
+  const result = scoreLiveJobs([
+    { ...sample, company: 123 },
+    { ...sample, company: '   ' },
+    { ...sample, company: null }
+  ]);
+
+  assert.equal(result.length, 0);
+});
+
+test('rejects invalid job identifiers', () => {
+  const result = scoreLiveJobs([
+    { ...sample, jobId: -1 },
+    { ...sample, jobId: 0 },
+    { ...sample, jobId: 1.5 },
+    { ...sample, jobId: '123' }
+  ]);
+
+  assert.equal(result.length, 0);
+});
+
+test('normalizes company names for duplicate detection', () => {
+  const result = scoreLiveJobs([
+    sample,
+    { ...sample, company: ' example company ' }
+  ]);
+
+  assert.equal(result.length, 1);
+});
+
+test('ranks candidates by differentiated relevance', () => {
+  const result = scoreLiveJobs([
+    { ...sample, jobId: 1, title: 'Operations Manager' },
+    { ...sample, jobId: 2, title: 'Marketing Manager' },
+    { ...sample, jobId: 3, title: 'Customer Support Specialist' },
+    { ...sample, jobId: 4, title: 'Administrative Coordinator' }
+  ]);
+
+  assert.deepEqual(
+    result.map(item => item.score),
+    [55, 50, 45, 40]
+  );
+
+  assert.equal(
+    result[0].opportunity,
+    'Administrative automation'
+  );
+});
+
+test('rejects URLs containing credentials', () => {
+  const result = scoreLiveJobs([
+    {
+      ...sample,
+      source: 'https://user:password@example.com/jobs'
+    }
+  ]);
+
+  assert.equal(result.length, 0);
+});

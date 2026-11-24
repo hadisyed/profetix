@@ -1,4 +1,4 @@
-
+import { calculateScore } from './scoring.mjs';
 import { collectJobs } from './collector.mjs';
 import { filterRelevantJobs } from './filter.mjs';
 import { pathToFileURL } from 'node:url';
@@ -10,9 +10,16 @@ export function scoreLiveJobs(jobs) {
   const seen = new Set();
 
   return relevant.flatMap(job => {
-    if (!job.company || !job.jobId || !job.source) {
-      return [];
-    }
+if (
+  typeof job.company !== 'string' ||
+  !job.company.trim() ||
+  !Number.isSafeInteger(job.jobId) ||
+  job.jobId <= 0 ||
+  typeof job.source !== 'string' ||
+  !job.source.trim()
+) {
+  return [];
+}
 
     try {
       const url = new URL(job.source);
@@ -29,22 +36,21 @@ export function scoreLiveJobs(jobs) {
     }
 
     const key = JSON.stringify([
-      job.company.toLowerCase(),
+      job.company.trim().toLowerCase(),
       job.jobId
     ]);
 
     if (seen.has(key)) return [];
     seen.add(key);
 
-    const breakdown = {
-      signal: 30,
-      fit: 10,
-      recency: 0,
-      evidence: 0
-    };
+  const breakdown = {
+  signal: 30,
+  fit: job.fit,
+  recency: 0,
+  evidence: 0
+};
 
-    const score = Object.values(breakdown)
-      .reduce((total, value) => total + value, 0);
+const score = calculateScore(breakdown);
 
     return [{
       company: job.company,
