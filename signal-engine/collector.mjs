@@ -1,5 +1,6 @@
 
 import { pathToFileURL } from 'node:url';
+import { getApprovedSources } from './sources.mjs';
 
 // Profetix Live Signal Collector v0.1
 
@@ -10,7 +11,20 @@ export async function collectJobs(board, company) {
 
   const endpoint =
     `https://boards-api.greenhouse.io/v1/boards/${board}/jobs`;
+const approved = getApprovedSources().some(source =>
+  source.provider === 'Greenhouse' &&
+  source.board === board &&
+  source.company === company &&
+  source.endpoint === endpoint
+);
 
+if (!approved) {
+  throw new Error('Source is not approved for collection');
+}
+  return fetchJobListings(endpoint, company);
+}
+
+async function fetchJobListings(endpoint, company) {
   const response = await fetch(endpoint, {
     signal: AbortSignal.timeout(15000),
     redirect: 'error'
