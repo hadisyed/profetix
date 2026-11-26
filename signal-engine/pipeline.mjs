@@ -10,8 +10,11 @@ import {
 } from './storage.mjs';
 
 import { withStorageLock } from './lock.mjs';
-
-// Profetix Intelligence Pipeline v0.2
+import {
+  createExecutionId,
+  recordExecution
+} from './monitor.mjs';
+// // Profetix Intelligence Pipeline v0.3
 
 export function scoreLiveJobs(jobs) {
   const relevant = filterRelevantJobs(jobs);
@@ -92,48 +95,109 @@ export async function runPipeline(board, company) {
   };
 }
 
+
 export async function runPersistentPipeline(
   board,
   company,
-  filePath
+  filePath,
+  monitorPath
 ) {
-  const result = await runPipeline(board, company);
+  const executionId = createExecutionId();
+  const startedAt = performance.now();
 
-  return withStorageLock(async () => {
-    const existing = await loadOpportunities(filePath);
+  const monitoringErrors = [];
 
-    const records = new Map();
+  async function logEvent(event) {
+    try {
+      await recordExecution({
+        executionId,
+        ...event
+      }, monitorPath);
+    } catch {
+      monitoringErrors.push(event.status);
 
-    for (const item of [
-      ...existing,
-      ...result.opportunities
-    ]) {
-      const key = JSON.stringify([
-        item.company.trim().toLowerCase(),
-        item.jobId
-      ]);
-
-      records.set(key, {
-        ...item,
-        status: 'manual review required',
-        outreachAuthorized: false
-      });
+      console.warn(
+        `Execution monitoring unavailable: ${event.status}`
+      );
     }
+  }
 
-    const opportunities = [...records.values()]
-      .sort((a, b) => b.score - a.score);
+  await logEvent({
+    status: 'started'
+  });
 
-    const totalStored = await saveOpportunities(
-      opportunities,
-      filePath
-    );
+  let outcome;
 
-    return {
-      ...result,
-      totalStored
-    };
-  }, filePath);
+  try {
+    const result = await runPipeline(board, company);
+
+    outcome = await withStorageLock(async () => {
+      const existing = await loadOpportunities(filePath);
+
+      const records = new Map();
+
+      for (const item of [
+        ...existing,
+        ...result.opportunities
+      ]) {
+        const key = JSON.stringify([
+          item.company.trim().toLowerCase(),
+          item.jobId
+        ]);
+
+        records.set(key, {
+          ...item,
+          status: 'manual review required',
+          outreachAuthorized: false
+        });
+      }
+
+      const opportunities = [...records.values()]
+        .sort((a, b) => b.score - a.score);
+
+      const totalStored = await saveOpportunities(
+        opportunities,
+        filePath
+      );
+
+      return {
+        ...result,
+        totalStored
+      };
+    }, filePath);
+
+  } catch (error) {
+    await logEvent({
+      status: 'failed',
+      durationMs: Math.round(
+        performance.now() - startedAt
+      )
+    });
+
+    throw error;
+  }
+
+  await logEvent({
+    status: 'succeeded',
+    durationMs: Math.round(
+      performance.now() - startedAt
+    ),
+    totalCollected: outcome.totalCollected,
+    totalCandidates: outcome.totalCandidates,
+    totalStored: outcome.totalStored
+  });
+
+  return {
+    ...outcome,
+    executionId,
+    monitoringStatus:
+      monitoringErrors.length === 0
+        ? 'complete'
+        : 'degraded',
+    monitoringErrors
+  };
 }
+
 
 if (
   process.argv[1] &&

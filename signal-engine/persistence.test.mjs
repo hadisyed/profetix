@@ -1,5 +1,7 @@
+
 import test, { mock } from 'node:test';
 import assert from 'node:assert/strict';
+
 import {
   mkdtemp,
   rm,
@@ -7,6 +9,7 @@ import {
   writeFile,
   unlink
 } from 'node:fs/promises';
+
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -30,6 +33,10 @@ const {
   saveOpportunities
 } = await import('./storage.mjs');
 
+const {
+  loadExecutionHistory
+} = await import('./monitor.mjs');
+
 async function temporaryStorage(t) {
   const directory = await mkdtemp(
     join(tmpdir(), 'profetix-persistence-')
@@ -42,7 +49,10 @@ async function temporaryStorage(t) {
     });
   });
 
-  return join(directory, 'opportunities.json');
+  return {
+    filePath: join(directory, 'opportunities.json'),
+    monitorPath: join(directory, 'executions.jsonl')
+  };
 }
 
 function mockJobs(t, ids) {
@@ -60,12 +70,13 @@ function mockJobs(t, ids) {
 }
 
 test('persists newly discovered opportunities', async (t) => {
-  const filePath = await temporaryStorage(t);
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
 
   mockJobs(t, [123]);
 
   const result = await runPersistentPipeline(
-    'example', 'Example', filePath
+    'example', 'Example', filePath, monitorPath
   );
 
   const stored = await loadOpportunities(filePath);
@@ -78,7 +89,8 @@ test('persists newly discovered opportunities', async (t) => {
 });
 
 test('retains previously stored opportunities', async (t) => {
-  const filePath = await temporaryStorage(t);
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
 
   await saveOpportunities([{
     company: 'Previous Company',
@@ -89,7 +101,7 @@ test('retains previously stored opportunities', async (t) => {
   mockJobs(t, [200]);
 
   const result = await runPersistentPipeline(
-    'example', 'Example', filePath
+    'example', 'Example', filePath, monitorPath
   );
 
   const stored = await loadOpportunities(filePath);
@@ -101,16 +113,17 @@ test('retains previously stored opportunities', async (t) => {
 });
 
 test('prevents duplicates across executions', async (t) => {
-  const filePath = await temporaryStorage(t);
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
 
   mockJobs(t, [123]);
 
   await runPersistentPipeline(
-    'example', 'Example', filePath
+    'example', 'Example', filePath, monitorPath
   );
 
   const result = await runPersistentPipeline(
-    'example', 'Example', filePath
+    'example', 'Example', filePath, monitorPath
   );
 
   assert.equal(result.totalStored, 1);
@@ -121,7 +134,8 @@ test('prevents duplicates across executions', async (t) => {
 });
 
 test('preserves storage when collection fails', async (t) => {
-  const filePath = await temporaryStorage(t);
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
 
   await saveOpportunities([{
     company: 'Previous Company',
@@ -137,7 +151,7 @@ test('preserves storage when collection fails', async (t) => {
 
   await assert.rejects(
     runPersistentPipeline(
-      'example', 'Example', filePath
+      'example', 'Example', filePath, monitorPath
     ),
     /Network unavailable/
   );
@@ -148,7 +162,8 @@ test('preserves storage when collection fails', async (t) => {
 });
 
 test('preserves manual verification safeguards', async (t) => {
-  const filePath = await temporaryStorage(t);
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
 
   await saveOpportunities([{
     company: 'Previous Company',
@@ -161,7 +176,7 @@ test('preserves manual verification safeguards', async (t) => {
   mockJobs(t, [123]);
 
   await runPersistentPipeline(
-    'example', 'Example', filePath
+    'example', 'Example', filePath, monitorPath
   );
 
   const stored = await loadOpportunities(filePath);
@@ -173,7 +188,8 @@ test('preserves manual verification safeguards', async (t) => {
 });
 
 test('blocks unapproved sources without modifying storage', async (t) => {
-  const filePath = await temporaryStorage(t);
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
 
   await saveOpportunities([], filePath);
 
@@ -189,7 +205,7 @@ test('blocks unapproved sources without modifying storage', async (t) => {
 
   await assert.rejects(
     runPersistentPipeline(
-      'stripe', 'Stripe', filePath
+      'stripe', 'Stripe', filePath, monitorPath
     ),
     /Source is not approved for collection/
   );
@@ -202,7 +218,8 @@ test('blocks unapproved sources without modifying storage', async (t) => {
 });
 
 test('preserves storage when an abandoned lock exists', async (t) => {
-  const filePath = await temporaryStorage(t);
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
 
   await saveOpportunities([{
     company: 'Previous Company',
@@ -220,7 +237,7 @@ test('preserves storage when an abandoned lock exists', async (t) => {
 
   await assert.rejects(
     runPersistentPipeline(
-      'example', 'Example', filePath
+      'example', 'Example', filePath, monitorPath
     ),
     /Storage is locked by another execution/
   );
@@ -237,7 +254,8 @@ test('preserves storage when an abandoned lock exists', async (t) => {
 });
 
 test('resumes safely after controlled lock recovery', async (t) => {
-  const filePath = await temporaryStorage(t);
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
 
   await saveOpportunities([{
     company: 'Example',
@@ -253,7 +271,7 @@ test('resumes safely after controlled lock recovery', async (t) => {
 
   await assert.rejects(
     runPersistentPipeline(
-      'example', 'Example', filePath
+      'example', 'Example', filePath, monitorPath
     ),
     /Storage is locked by another execution/
   );
@@ -262,7 +280,7 @@ test('resumes safely after controlled lock recovery', async (t) => {
   await unlink(lockPath);
 
   const result = await runPersistentPipeline(
-    'example', 'Example', filePath
+    'example', 'Example', filePath, monitorPath
   );
 
   const stored = await loadOpportunities(filePath);
@@ -279,4 +297,158 @@ test('resumes safely after controlled lock recovery', async (t) => {
     assert.equal(item.outreachAuthorized, false);
     assert.equal(item.status, 'manual review required');
   }
+});
+
+// Operational monitoring integration tests
+
+test('records successful pipeline execution', async (t) => {
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
+
+  mockJobs(t, [123, 456]);
+
+  const result = await runPersistentPipeline(
+    'example', 'Example', filePath, monitorPath
+  );
+
+  const history = await loadExecutionHistory(monitorPath);
+
+  assert.equal(history.length, 2);
+  assert.equal(history[0].status, 'started');
+  assert.equal(history[1].status, 'succeeded');
+
+  assert.equal(
+    history[0].executionId,
+    result.executionId
+  );
+
+  assert.equal(
+    history[1].executionId,
+    result.executionId
+  );
+
+  assert.equal(history[1].totalCollected, 2);
+  assert.equal(history[1].totalCandidates, 2);
+  assert.equal(history[1].totalStored, 2);
+
+  assert.ok(
+    Number.isSafeInteger(history[1].durationMs)
+  );
+
+  assert.ok(history[1].durationMs >= 0);
+
+  assert.equal(result.monitoringStatus, 'complete');
+  assert.deepEqual(result.monitoringErrors, []);
+});
+
+test('records failed pipeline execution', async (t) => {
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
+
+  t.mock.method(globalThis, 'fetch', async () => {
+    throw new Error('Network unavailable');
+  });
+
+  await assert.rejects(
+    runPersistentPipeline(
+      'example', 'Example', filePath, monitorPath
+    ),
+    /Network unavailable/
+  );
+
+  const history = await loadExecutionHistory(monitorPath);
+
+  assert.equal(history.length, 2);
+  assert.equal(history[0].status, 'started');
+  assert.equal(history[1].status, 'failed');
+
+  assert.equal(
+    history[0].executionId,
+    history[1].executionId
+  );
+
+  assert.ok(
+    Number.isSafeInteger(history[1].durationMs)
+  );
+
+  assert.ok(history[1].durationMs >= 0);
+});
+
+test('maintains distinct execution histories', async (t) => {
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
+
+  mockJobs(t, [123]);
+
+  const first = await runPersistentPipeline(
+    'example', 'Example', filePath, monitorPath
+  );
+
+  const second = await runPersistentPipeline(
+    'example', 'Example', filePath, monitorPath
+  );
+
+  const history = await loadExecutionHistory(monitorPath);
+
+  assert.equal(history.length, 4);
+
+  assert.notEqual(
+    first.executionId,
+    second.executionId
+  );
+
+  assert.deepEqual(
+    history.map(item => item.status),
+    ['started', 'succeeded', 'started', 'succeeded']
+  );
+
+  assert.deepEqual(
+    history.map(item => item.executionId),
+    [
+      first.executionId,
+      first.executionId,
+      second.executionId,
+      second.executionId
+    ]
+  );
+});
+
+test('preserves successful storage when monitoring fails', async (t) => {
+  const { filePath, monitorPath } =
+    await temporaryStorage(t);
+
+  // Create a file where a monitoring directory is expected.
+  await writeFile(monitorPath, 'blocked', 'utf8');
+
+  const invalidMonitorPath = join(
+    monitorPath,
+    'executions.jsonl'
+  );
+
+  mockJobs(t, [123]);
+
+  const result = await runPersistentPipeline(
+    'example',
+    'Example',
+    filePath,
+    invalidMonitorPath
+  );
+
+  const stored = await loadOpportunities(filePath);
+
+  assert.equal(result.totalStored, 1);
+  assert.equal(stored.length, 1);
+  assert.equal(stored[0].jobId, 123);
+
+  assert.equal(result.monitoringStatus, 'degraded');
+
+  assert.deepEqual(
+    result.monitoringErrors,
+    ['started', 'succeeded']
+  );
+
+  assert.equal(
+    await readFile(monitorPath, 'utf8'),
+    'blocked'
+  );
 });
