@@ -2,6 +2,10 @@ import { calculateScore } from './scoring.mjs';
 import { collectJobs } from './collector.mjs';
 import { filterRelevantJobs } from './filter.mjs';
 import { pathToFileURL } from 'node:url';
+import {
+  loadOpportunities,
+  saveOpportunities
+} from './storage.mjs';
 
 // Profetix Intelligence Pipeline v0.1
 
@@ -83,6 +87,48 @@ export async function runPipeline(board, company) {
     opportunities
   };
 }
+
+export async function runPersistentPipeline(
+  board,
+  company,
+  filePath
+) {
+  const result = await runPipeline(board, company);
+
+  const existing = await loadOpportunities(filePath);
+
+  const records = new Map();
+
+  for (const item of [
+    ...existing,
+    ...result.opportunities
+  ]) {
+    const key = JSON.stringify([
+      item.company.trim().toLowerCase(),
+      item.jobId
+    ]);
+
+    records.set(key, {
+      ...item,
+      status: 'manual review required',
+      outreachAuthorized: false
+    });
+  }
+
+  const opportunities = [...records.values()]
+    .sort((a, b) => b.score - a.score);
+
+  const totalStored = await saveOpportunities(
+    opportunities,
+    filePath
+  );
+
+  return {
+    ...result,
+    totalStored
+  };
+}
+
 
 if (
   process.argv[1] &&
