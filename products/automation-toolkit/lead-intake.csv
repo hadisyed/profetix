@@ -1,0 +1,2 @@
+lead_id,created_at,company,contact_name,contact_email,inquiry_type,challenge,consent_to_marketing,consent_timestamp,source,assigned_owner,status,last_contact_at,next_action_at
+EXAMPLE-001,2026-11-12T09:00:00-05:00,Example Bakery,Sample Contact,sample@example.invalid,Free AI Opportunity Review,Reduce manual booking work,no,,website,Owner,new,,

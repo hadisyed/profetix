@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {evaluate,rank} from './engine.mjs';
+const now=Date.parse('2026-11-19T12:00:00Z');
+const base={company:'Fictional Example Realty',source:'https://example.com/news',date:'2026-11-10',type:'hiring',evidence:'official',fit:30};
+test('maximum score and no outreach authorization',()=>{const r=evaluate(base,now);assert.equal(r.score,100);assert.equal(r.priority,'high');assert.equal(r.outreachAuthorized,false)});
+test('unverified signal requires review',()=>assert.equal(evaluate({...base,evidence:'unverified'},now).priority,'verify or refresh'));
+test('stale signal requires refresh',()=>assert.equal(evaluate({...base,date:'2025-01-01'},now).priority,'verify or refresh'));
+test('invalid fit, future dates and unsafe URLs rejected',()=>{for(const patch of [{fit:31},{date:'2027-01-01'},{source:'file:///etc/passwd'}])assert.throws(()=>evaluate({...base,...patch},now))});
+test('deduplication and invalid record reporting',()=>{const r=rank([base,{...base,fit:10},{...base,fit:-1}],now);assert.equal(r.opportunities.length,1);assert.equal(r.opportunities[0].score,100);assert.equal(r.rejected.length,1)});
