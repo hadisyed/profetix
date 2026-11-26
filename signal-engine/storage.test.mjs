@@ -64,15 +64,26 @@ test('saves and retrieves opportunities', async (t) => {
 test('replaces existing storage successfully', async (t) => {
   const path = await createTestPath(t);
 
-  await saveOpportunities([{ jobId: 1 }], path);
-  await saveOpportunities([{ jobId: 2 }], path);
+  const first = {
+    company: 'Example Company',
+    jobId: 1,
+    score: 40
+  };
+
+  const second = {
+    company: 'Example Company',
+    jobId: 2,
+    score: 55
+  };
+
+  await saveOpportunities([first], path);
+  await saveOpportunities([second], path);
 
   assert.deepEqual(
     await loadOpportunities(path),
-    [{ jobId: 2 }]
+    [second]
   );
-});
-
+}); 
 test('rejects invalid storage input', async (t) => {
   const path = await createTestPath(t);
 
@@ -114,5 +125,97 @@ test('removes temporary files after saving', async (t) => {
   assert.deepEqual(
     files,
     ['opportunities.json']
+  );
+});
+test('rejects invalid company names', async (t) => {
+  const path = await createTestPath(t);
+
+  for (const company of ['', '   ', null, 123]) {
+    await assert.rejects(
+      saveOpportunities([{
+        company,
+        jobId: 1,
+        score: 40
+      }], path),
+      /Invalid opportunity record/
+    );
+  }
+});
+
+test('rejects invalid job identifiers', async (t) => {
+  const path = await createTestPath(t);
+
+  for (const jobId of [0, -1, 1.5, '123', null]) {
+    await assert.rejects(
+      saveOpportunities([{
+        company: 'Example',
+        jobId,
+        score: 40
+      }], path),
+      /Invalid opportunity record/
+    );
+  }
+});
+
+test('rejects invalid opportunity scores', async (t) => {
+  const path = await createTestPath(t);
+
+  for (const score of [-1, 101, NaN, Infinity, '40', null]) {
+    await assert.rejects(
+      saveOpportunities([{
+        company: 'Example',
+        jobId: 1,
+        score
+      }], path),
+      /Invalid opportunity record/
+    );
+  }
+});
+
+test('rejects malformed individual records', async (t) => {
+  const path = await createTestPath(t);
+
+  for (const record of [null, [], {}, 'invalid']) {
+    await assert.rejects(
+      saveOpportunities([record], path),
+      /Invalid opportunity record/
+    );
+  }
+});
+
+test('rejects malformed records loaded from disk', async (t) => {
+  const path = await createTestPath(t);
+
+  await writeFile(
+    path,
+    JSON.stringify([{ jobId: 1 }]),
+    'utf8'
+  );
+
+  await assert.rejects(
+    loadOpportunities(path),
+    /Invalid opportunity record/
+  );
+});
+
+test('preserves existing storage after invalid save', async (t) => {
+  const path = await createTestPath(t);
+
+  const records = [{
+    company: 'Example',
+    jobId: 1,
+    score: 40
+  }];
+
+  await saveOpportunities(records, path);
+
+  await assert.rejects(
+    saveOpportunities([null], path),
+    /Invalid opportunity record/
+  );
+
+  assert.deepEqual(
+    await loadOpportunities(path),
+    records
   );
 });

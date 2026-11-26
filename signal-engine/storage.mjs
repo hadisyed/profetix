@@ -1,16 +1,45 @@
+import {
+  mkdir,
+  readFile,
+  writeFile,
+  rename,
+  rm
+} from 'node:fs/promises';
 
-import { mkdir, readFile, writeFile, rename, rm } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 
-// Profetix Persistent Intelligence Storage v0.1
+// Profetix Persistent Intelligence Storage v0.2
 
 const defaultPath = fileURLToPath(
   new URL('./data/opportunities.json', import.meta.url)
 );
 
-export async function loadOpportunities(filePath = defaultPath) {
+function validateRecords(records) {
+  for (const [index, record] of records.entries()) {
+    if (
+      !record ||
+      typeof record !== 'object' ||
+      Array.isArray(record) ||
+      typeof record.company !== 'string' ||
+      !record.company.trim() ||
+      !Number.isSafeInteger(record.jobId) ||
+      record.jobId <= 0 ||
+      !Number.isFinite(record.score) ||
+      record.score < 0 ||
+      record.score > 100
+    ) {
+      throw new Error(
+        `Invalid opportunity record at index ${index}`
+      );
+    }
+  }
+}
+
+export async function loadOpportunities(
+  filePath = defaultPath
+) {
   try {
     const content = await readFile(filePath, 'utf8');
     const records = JSON.parse(content);
@@ -18,6 +47,8 @@ export async function loadOpportunities(filePath = defaultPath) {
     if (!Array.isArray(records)) {
       throw new Error('Invalid storage format');
     }
+
+    validateRecords(records);
 
     return records;
   } catch (error) {
@@ -37,9 +68,14 @@ export async function saveOpportunities(
     throw new Error('Records must be an array');
   }
 
-  await mkdir(dirname(filePath), { recursive: true });
+  validateRecords(records);
 
-  const temporaryPath = `${filePath}.${randomUUID()}.tmp`;
+  await mkdir(dirname(filePath), {
+    recursive: true
+  });
+
+  const temporaryPath =
+    `${filePath}.${randomUUID()}.tmp`;
 
   try {
     await writeFile(
