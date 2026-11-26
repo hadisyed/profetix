@@ -1,29 +1,33 @@
+
 import { calculateScore } from './scoring.mjs';
 import { collectJobs } from './collector.mjs';
 import { filterRelevantJobs } from './filter.mjs';
 import { pathToFileURL } from 'node:url';
+
 import {
   loadOpportunities,
   saveOpportunities
 } from './storage.mjs';
 
-// Profetix Intelligence Pipeline v0.1
+import { withStorageLock } from './lock.mjs';
+
+// Profetix Intelligence Pipeline v0.2
 
 export function scoreLiveJobs(jobs) {
   const relevant = filterRelevantJobs(jobs);
   const seen = new Set();
 
   return relevant.flatMap(job => {
-if (
-  typeof job.company !== 'string' ||
-  !job.company.trim() ||
-  !Number.isSafeInteger(job.jobId) ||
-  job.jobId <= 0 ||
-  typeof job.source !== 'string' ||
-  !job.source.trim()
-) {
-  return [];
-}
+    if (
+      typeof job.company !== 'string' ||
+      !job.company.trim() ||
+      !Number.isSafeInteger(job.jobId) ||
+      job.jobId <= 0 ||
+      typeof job.source !== 'string' ||
+      !job.source.trim()
+    ) {
+      return [];
+    }
 
     try {
       const url = new URL(job.source);
@@ -47,14 +51,14 @@ if (
     if (seen.has(key)) return [];
     seen.add(key);
 
-  const breakdown = {
-  signal: 30,
-  fit: job.fit,
-  recency: 0,
-  evidence: 0
-};
+    const breakdown = {
+      signal: 30,
+      fit: job.fit,
+      recency: 0,
+      evidence: 0
+    };
 
-const score = calculateScore(breakdown);
+    const score = calculateScore(breakdown);
 
     return [{
       company: job.company,
@@ -95,40 +99,41 @@ export async function runPersistentPipeline(
 ) {
   const result = await runPipeline(board, company);
 
-  const existing = await loadOpportunities(filePath);
+  return withStorageLock(async () => {
+    const existing = await loadOpportunities(filePath);
 
-  const records = new Map();
+    const records = new Map();
 
-  for (const item of [
-    ...existing,
-    ...result.opportunities
-  ]) {
-    const key = JSON.stringify([
-      item.company.trim().toLowerCase(),
-      item.jobId
-    ]);
+    for (const item of [
+      ...existing,
+      ...result.opportunities
+    ]) {
+      const key = JSON.stringify([
+        item.company.trim().toLowerCase(),
+        item.jobId
+      ]);
 
-    records.set(key, {
-      ...item,
-      status: 'manual review required',
-      outreachAuthorized: false
-    });
-  }
+      records.set(key, {
+        ...item,
+        status: 'manual review required',
+        outreachAuthorized: false
+      });
+    }
 
-  const opportunities = [...records.values()]
-    .sort((a, b) => b.score - a.score);
+    const opportunities = [...records.values()]
+      .sort((a, b) => b.score - a.score);
 
-  const totalStored = await saveOpportunities(
-    opportunities,
-    filePath
-  );
+    const totalStored = await saveOpportunities(
+      opportunities,
+      filePath
+    );
 
-  return {
-    ...result,
-    totalStored
-  };
+    return {
+      ...result,
+      totalStored
+    };
+  }, filePath);
 }
-
 
 if (
   process.argv[1] &&
