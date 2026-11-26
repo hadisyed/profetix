@@ -1,6 +1,12 @@
 import test, { mock } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm, readFile } from 'node:fs/promises';
+import {
+  mkdtemp,
+  rm,
+  readFile,
+  writeFile,
+  unlink
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -193,4 +199,84 @@ test('blocks unapproved sources without modifying storage', async (t) => {
   const after = await readFile(filePath, 'utf8');
 
   assert.equal(after, before);
+});
+
+test('preserves storage when an abandoned lock exists', async (t) => {
+  const filePath = await temporaryStorage(t);
+
+  await saveOpportunities([{
+    company: 'Previous Company',
+    jobId: 100,
+    score: 40
+  }], filePath);
+
+  const before = await readFile(filePath, 'utf8');
+
+  const lockPath = `${filePath}.lock`;
+
+  await writeFile(lockPath, '{}', 'utf8');
+
+  mockJobs(t, [123]);
+
+  await assert.rejects(
+    runPersistentPipeline(
+      'example', 'Example', filePath
+    ),
+    /Storage is locked by another execution/
+  );
+
+  assert.equal(
+    await readFile(filePath, 'utf8'),
+    before
+  );
+
+  assert.equal(
+    await readFile(lockPath, 'utf8'),
+    '{}'
+  );
+});
+
+test('resumes safely after controlled lock recovery', async (t) => {
+  const filePath = await temporaryStorage(t);
+
+  await saveOpportunities([{
+    company: 'Example',
+    jobId: 123,
+    score: 40
+  }], filePath);
+
+  const lockPath = `${filePath}.lock`;
+
+  await writeFile(lockPath, '{}', 'utf8');
+
+  mockJobs(t, [123, 456]);
+
+  await assert.rejects(
+    runPersistentPipeline(
+      'example', 'Example', filePath
+    ),
+    /Storage is locked by another execution/
+  );
+
+  // Remove only the synthetic lock created by this test.
+  await unlink(lockPath);
+
+  const result = await runPersistentPipeline(
+    'example', 'Example', filePath
+  );
+
+  const stored = await loadOpportunities(filePath);
+
+  assert.equal(result.totalStored, 2);
+  assert.equal(stored.length, 2);
+
+  assert.deepEqual(
+    stored.map(item => item.jobId).sort((a, b) => a - b),
+    [123, 456]
+  );
+
+  for (const item of stored) {
+    assert.equal(item.outreachAuthorized, false);
+    assert.equal(item.status, 'manual review required');
+  }
 });
